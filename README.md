@@ -1,10 +1,8 @@
-Certainly! Here's a vibrant, bullet-pointed, and Unicode-rich version with clear subheadings:
-
 # 🌟 MacroSearchEngine: The Future of Institutional-Grade Macro Data 🌟
 
-## 🚀 Vision & Mission
+## 🚀 Mission
 
-**MacroSearchEngine** is a groundbreaking, open-source platform designed to be the **single source of truth** for **institutional-grade macroeconomic data** — powered by **disruptive, low-cost technology**. Our mission is to democratize access to critical economic insights by combining:
+**MacroSearchEngine** is a bold, open-source platform designed to be the **single source of truth** for **institutional-grade macroeconomic data** — powered by **disruptive, low-cost technology**. Our mission is to democratize access to critical economic insights by combining:
 
 - 🔍 **Transparency** and **rigor** expected by top financial institutions  
 - 🌍 **Open collaboration** for rapid verification and continuous improvement  
