@@ -4,6 +4,7 @@ from urllib.parse import quote_plus
 import pandas as pd
 from io import StringIO
 from datetime import datetime
+import calendar
 
 def visit_page(url, fill_aspx=True):    
     session = stubborn_browser.seed_session(url="https://cpi.mospi.gov.in")
@@ -116,7 +117,23 @@ def get_item_inflation(start_date, end_date):
             df = table_df[0]
             df.columns = df.columns.str.strip()  # Clean column names
             df = df.dropna(how='all')  # Drop rows where all elements are NaN
-            df = df.reset_index(drop=True)  # Reset index        
+            df = df.reset_index(drop=True)  # Reset index   
+            months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                      'July', 'August', 'September', 'October', 'November', 'December']
+            month_to_num = {month: i+1 for i, month in enumerate(months)}
+            #convert Month columns to month numbers in a column
+            df['month_num'] = df['Month'].map(month_to_num)
+            #end of period date - use calendar to get last day
+            df['period_end'] = df.apply(lambda row: datetime(row['Year'], row['month_num'], calendar.monthrange(row['Year'], row['month_num'])[1]).date(), axis=1)
+            #drop month and year columns
+            df = df.drop(['Month', 'Year', 'month_num'], axis=1)
+            #rename columns
+            df.rename(columns={
+                'Item-Code': 'item_code',
+                'Description': 'item_label',
+                'Combined Inflation': 'CPI_YoY',
+                'Status': 'status'
+            }, inplace=True)
             return df
         except ValueError as e:
             print(f"Error reading table: {e}")
@@ -187,6 +204,27 @@ def get_group_inflation(start_date, end_date, sector="Combined"):
             df.columns = df.columns.str.strip()  # Clean column names
             df = df.dropna(how='all')  # Drop rows where all elements are NaN
             df = df.reset_index(drop=True)  # Reset index
+            df = df.drop(['State'], axis=1, errors='ignore')
+            #convert Jan... Dec to month numbers in a column
+            months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            month_to_num = {month: i+1 for i, month in enumerate(months)}
+            #pivot the month columns to rows  -Group	Sub Group	Description
+            df = df.melt(id_vars=['Year', 'Group', 'Sub Group', 'Description'], 
+                                                                var_name='Month',                                                       
+                                                                value_name='CPI_YoY')
+            df['month_num'] = df['Month'].map(month_to_num)       
+            #end of period date - use calendar to get last day
+            df['period_end'] = df.apply(lambda row: datetime(row['Year'], row['month_num'], calendar.monthrange(row['Year'], row['month_num'])[1]).date(), axis=1)
+
+            #drop year and month columns
+            df = df.drop(['Year', 'Month', 'month_num'], axis=1)
+
+            #rename columns
+            df.rename(columns={
+                'Group': 'group_code',
+                'Sub Group': 'subgroup_code',
+                'Description': 'subgroup_label'
+            }, inplace=True)
             return df
         except ValueError as e:
             print(f"Error reading table: {e}")
