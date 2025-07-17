@@ -9,7 +9,6 @@ import calendar
 import requests
 import asyncio
 
-
 def visit_page(url, fill_aspx=True):    
     session = stubborn_browser.seed_session(url="https://cpi.mospi.gov.in")
     res = stubborn_browser.get({"url":url, "session":session})
@@ -326,14 +325,16 @@ def get_periods(start_from):
     today = datetime.now()
     start_year = start_from.year
     start_month = start_from.month    
-    
+    periods = []
     for year in range(start_year, today.year + 1):
         for month in range(1, 13):
             if year == start_year and month < start_month:
                 continue
             if year == today.year and month > today.month-1:
                 continue
-            yield {"year": str(year), "month_code": str(month)}
+            periods.append({"year": year, "month": str(month)})
+    
+    return periods
             
 async def one_request(url, params=None):
     """
@@ -364,7 +365,12 @@ async def one_request(url, params=None):
         print(f"Error during request: {e}")
         return None
 
-def process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, code='group_code'):
+def month_end(year, month):
+    """
+    Returns the last day of the month for the given year and month.
+    """
+    return datetime(year, month, calendar.monthrange(year, month)[1]).date()
+def res_to_recs(data, metadata_df, codetype='group_code'):
     recs = []
     months = ["January", "February", "March", "April", "May", "June",
               "July", "August", "September", "October", "November", "December"]    
@@ -373,18 +379,23 @@ def process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, co
         month_text = d.get('month')        
         month = months.index(month_text) + 1 if month_text in months else 1
         rec = {            
-            "period_end":datetime(year, int(month), calendar.monthrange(year, int(month))[1]).date()
-        }
-        if code=='group_code':
-            rec["group_code"] = group_dict.get(d.get('group'))            
-            #add all item_weights_df for item_code starting with rec["group_code"]
-            rec["weight"] = item_weights_df[item_weights_df['item_code'].str.startswith(rec["group_code"])]['weight'].sum()
-        elif code=='subgroup_code':
-            rec["subgroup_code"] = subgroup_dict.get(d.get('subgroup'))
-            rec["weight"] = item_weights_df[item_weights_df['item_code'].str.startswith(rec["subgroup_code"])]['weight'].sum()
-        elif code=='item_code':
-            rec["item_code"] = item_dict.get(d.get('item'))
-            rec["weight"] = item_weights_df[item_weights_df['item_code'] == rec["item_code"]]['weight'].sum()
+            "period_end":month_end(int(year), month),
+        }        
+        
+        if codetype=='group_code':
+            rec["label"] = d.get("group", None)
+        elif codetype=='subgroup_code':            
+            rec["label"] = d.get("subgroup", None)            
+        elif codetype=='item_code':
+            rec["label"] = d.get("item", None)        
+        
+        rec["codetype"] = codetype
+
+        code_filter = (metadata_df['codetype'] == codetype) & (metadata_df['label'] == rec['label'])
+        rec["code"] = metadata_df[code_filter]['code'].str.strip().tolist()[0]  # Get the first item code
+                
+        weight_filter = (metadata_df['codetype'] == 'item_code') & (metadata_df['code'].str.startswith(rec["code"]))
+        rec["weight"] = metadata_df[weight_filter]['weight'].sum()        
 
         rec["CPI"] = float(d.get('index', 0))
         rec["CPI_YoY"] = float(d.get('inflation', 0))        
@@ -392,66 +403,73 @@ def process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, co
 
     return recs
 
-# Calculates all the as-reported values
-#async def as_reported(metadata):
+### Calculations
+'''
+Food_And_Beverages_Ex_Alcoholic_Beverages
+Food_And_Beverages
+'''
 
+async def food_and_beverages_inflation(start_from, metadata_df=None):    
+    # Food And Beverages is a group in CPI
 
-
-
-
-# Functions to calculate each aggregates for each group
-async def food_and_beverages_inflation(start_from, item_weights_df, group_dict, subgroup_dict, item_dict):    
-    # Food And Beverages is a group in CPI    
     group_url = f"{cpi_api}/getCPIIndex"
     item_url = f"{cpi_api}/getItemIndex"
 
-    #for each month starting start_from to today    
-    group_params = {
-        "base_year": "2012",
-        "series": "Current",
-        "Format": "json",
-        "group_code": "1",
-        "subgroup_code": "1.99",  # Food and Beverages
-        "state_code": "99",  # All India
-        "sector_code": "3"  # Combined
-    }
-
-    item_params = {
-        "base_year": "2012",
-        "Format": "json"
-    }
+    periods = get_periods(start_from)
 
     #All the alcoholic beverages
-    item_codes = ["2.1.01.1.1.01.0", "2.1.01.1.1.02.0", "2.1.01.1.1.03.0", "2.1.01.1.1.04.0", "2.1.01.1.1.05.0"]
-
-    group_tasks = []
-    item_tasks = []
-
-    for period in get_periods(start_from):
-        group_params = group_params.copy()                
-        group_params.update(period)        
-        group_tasks.append(one_request(group_url, group_params))
-
-        for item_code in item_codes:
-            item_params = item_params.copy()
-            item_params.update(period)
-            item_params["item_code"] = item_code
-            item_tasks.append(one_request(item_url, item_params))
+    item_codes = ["2.1.01.1.1.01.0", "2.1.01.1.1.02.0", "2.1.01.1.1.03.0", "2.1.01.1.1.04.0", "2.1.01.1.1.05.0"]    
     
-    results = await asyncio.gather(*group_tasks, *item_tasks)    
+    fetches = [
+        {
+            "url": group_url,
+            "params": {
+                "base_year": "2012",
+                "series": "Current",
+                "Format": "json",
+                "group_code": "1",        
+                "state_code": "99",  # All India
+                "sector_code": "3",  # Combined
+                "subgroup_code": "1.99",  # Food and Beverages,
+                "year":",".join([str(period['year']) for period in periods]),
+                "month":",".join([period['month'] for period in periods])
+            }
+        },
+        {
+            "url": item_url,
+            "params": {
+                "base_year": "2012",
+                "Format": "json",
+                "year":",".join([str(period['year']) for period in periods]),
+                "month":",".join([period['month'] for period in periods]),
+                "item_code":",".join(item_codes)
+            }
+        }
+    ]
+
+    tasks = []
+    for fetch in fetches:
+        print (fetch['params'])
+        tasks.append(one_request(fetch['url'], fetch['params']))
+    # Run all tasks concurrently
+    results = await asyncio.gather(*tasks)
+    if not results or len(results) < 2:
+        print("No data found for Food and Beverages inflation.")
+        return None 
+    group_result = results[0]
+    item_result = results[1]
+    if group_result is None or item_result is None:
+        print("No data found for Food and Beverages inflation.")
+        return None
+    
     recs = []
-    for i, result in enumerate(results):        
-        if result is None:
-            continue
-        # df will have period_end, group_code, item_code, subgroup_code, cpi, yoy, weight
-        if i < len(group_tasks):
-            # Group results
-            data = result.get('data', [])            
-            recs.extend(process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, code='group_code'))            
-        else:
-            # Item results
-            data = result.get('data', [])
-            recs.extend(process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, code='item_code'))
+    # Group results
+    data = group_result.get('data', [])
+    recs.extend(res_to_recs(data, metadata_df, codetype='group_code'))
+
+    # Item results
+    data = item_result.get('data', [])
+    recs.extend(res_to_recs(data, metadata_df, codetype='item_code'))
     
     # Convert recs to DataFrame
     df = pd.DataFrame(recs)
@@ -529,7 +547,8 @@ async def update():
 
     print("Data updated successfully.")
     '''
-    #df = await food_and_beverages_inflation(datetime(2025, 6, 1), item_weights_df, group_dict, subgroup_dict, item_dict)
+    df = await food_and_beverages_inflation(datetime(2025, 6, 1), metadata_df)
+    print (df)
     #df.to_csv('food_and_beverages_inflation.csv', index=False, sep='|')
     
 
