@@ -1,10 +1,14 @@
-from tools import stubborn_browser
+from tools import stubborn_browser, aggregate_inflation
 from bs4 import BeautifulSoup
 from urllib.parse import quote_plus
 import pandas as pd
 from io import StringIO
 from datetime import datetime
 import calendar
+#from curl_cffi import requests
+import requests
+import asyncio
+
 
 def visit_page(url, fill_aspx=True):    
     session = stubborn_browser.seed_session(url="https://cpi.mospi.gov.in")
@@ -30,6 +34,54 @@ def visit_page(url, fill_aspx=True):
     else:
         return session, soup, None
 
+def get_metadata():    
+    url = "https://esankhyiki.mospi.gov.in/API/CPI%20Metadata.xlsx"
+    recs = []    
+    try:
+        #this has many worksheets, we need to read the metadata from the "Group_code", "SubGroup_code" and "Item" worksheets
+        #header in every sheet is in the first row
+        metadata_df = pd.read_excel(url, sheet_name=None, header=0)  # Read all sheets into a dictionary of DataFrames        
+        
+        #group codes are in "Group_code" worksheet        
+        #group_df = metadata_df[metadata_df['Worksheet'] == 'Group_code' and metadata_df['Base_Year'] == '2012']
+        group_df = metadata_df['Group_code']  # Directly access the 'Group_code' sheet
+        group_df = group_df[group_df['Base_Year'] == 2012]  # Filter for Base Year 2012        
+        #Description is the label, Group_code is the code
+        #Sometimes group_code is a string - sometimes it is a number, so convert to string
+        for row in group_df.itertuples():
+            recs.append({
+                "code": str(row.Group_Code).strip()+".",
+                "label": str(row.Description).strip(),
+                "codetype":"group_code"
+            })
+        
+        #subgroup codes are in "SubGroup_code" worksheet
+        subgroup_df = metadata_df['SubGroup_code']  # Directly access the 'SubGroup_code' sheet
+        subgroup_df = subgroup_df[subgroup_df['Base_Year'] == 2012]                      
+        subgroup_df = subgroup_df[subgroup_df['Subgroup Description'].notnull()]  
+        for row in subgroup_df.itertuples():            
+            recs.append({
+                "code": str(row.SubGroup_Code).strip()+".",
+                "label": str(row._3).strip(),
+                "codetype":"subgroup_code"
+            })        
+
+        #item codes are in "Item" worksheet
+        item_df = metadata_df['Item']  # Directly access the 'Item' sheet
+        item_df = item_df[item_df['Base_Year'] == 2012]
+        #Item Label is the label, Item Code is the code        
+        for row in item_df.itertuples():
+            recs.append({
+                "code": str(row.Item_Code).strip(),
+                "label": str(row._2).strip(),
+                "codetype":"item_code"
+            })
+        
+        return pd.DataFrame(recs)
+    except Exception as e:
+        print(f"Error fetching metadata: {e}")
+        raise e
+
 # Get Itemised Weights - This is needed to reorganise CPI according to custom groupings
 def get_item_weights():
     url = "https://cpi.mospi.gov.in/Weight_AI_Item_Combined_2012.aspx"
@@ -47,6 +99,41 @@ def get_item_weights():
     }, inplace=True)
     table_df['item_label'] = table_df['item_label'].astype(str).str.strip()
     table_df['item_code'] = table_df['item_code'].astype(str).str.strip()
+
+    return table_df
+
+def get_group_weights():
+    url = "https://cpi.mospi.gov.in/Weights_2012.aspx"
+    session, soup, params = visit_page(url, fill_aspx=False)
+    table = soup.find('table', {'id': 'Content1_GridView1'})
+
+    table_df = pd.read_html(StringIO(str(table)))[0]
+    
+    table_df = table_df.drop(columns=['State'], errors='ignore')
+    
+    #table_df.columns = ['Group_Code', 'Group Label', 'Weight']
+    #rename All India Group Combined Weight(Base:2012) to Weight    
+    table_df.rename(columns={
+        'Group': 'group_code',
+        'SubGroup': 'subgroup_code',
+        'Item': 'label',
+        'Rural': 'rural',
+        'Urban': 'urban',
+    }, inplace=True)
+    
+    table_df['label'] = table_df['label'].astype(str).str.strip()
+    table_df['group_code'] = table_df['group_code'].astype(str).str.strip()
+    table_df['subgroup_code'] = table_df['subgroup_code'].astype(str).str.strip()    
+    table_df['codetype'] = table_df.apply(lambda x: 'group_code' if pd.isna(x['subgroup_code']) or x['subgroup_code'] == '' else 'subgroup_code', axis=1)
+    table_df['code'] = table_df.apply(lambda x: x['group_code'] if pd.isna(x['subgroup_code']) or x['subgroup_code'] == '' else x['subgroup_code'], axis=1)
+    
+    table_df = table_df.drop(columns=['group_code', 'subgroup_code'], errors='ignore')        
+    
+    #melt create a new column for rural and urban
+    table_df = table_df.melt(id_vars=['code', 'label', 'codetype'], 
+                             value_vars=['rural', 'urban'], 
+                             var_name='region', 
+                             value_name='weight')    
 
     return table_df
 
@@ -232,17 +319,218 @@ def get_group_inflation(start_date, end_date, sector="Combined"):
     else:
         print("No data found in the table.")
 
+cpi_api = "https://api.mospi.gov.in/api/cpi"
 
-def update():
+#returns {"year":, "month":} records starting from start_from to today
+def get_periods(start_from):
+    today = datetime.now()
+    start_year = start_from.year
+    start_month = start_from.month    
+    
+    for year in range(start_year, today.year + 1):
+        for month in range(1, 13):
+            if year == start_year and month < start_month:
+                continue
+            if year == today.year and month > today.month-1:
+                continue
+            yield {"year": str(year), "month_code": str(month)}
+            
+async def one_request(url, params=None):
+    """
+    Make a single request to the given URL with optional parameters.
+    Returns the response object.
+    """
+    # loop till you get all the pages
+    data = []
+    try:
+        res = requests.get(url, params)
+        res.raise_for_status()  # Raise an error for bad responses
+        if res.status_code == 200:
+            res_json = res.json()
+            data.extend(res_json.get('data', []))
+            pages = res_json.get('meta_data', {}).get("total_pages", 1)
+            for page in range(2, pages+1):
+                params['page'] = page
+                res = requests.get(url, params)
+                res.raise_for_status()
+                if res.status_code == 200:
+                    data.extend(res.json().get('data', []))
+            
+            return {"data": data}
+        else:
+            print(f"Request failed with status code: {res.status_code}")
+            return None
+    except Exception as e:
+        print(f"Error during request: {e}")
+        return None
+
+def process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, code='group_code'):
+    recs = []
+    months = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"]    
+    for d in data:
+        year = d.get('year')
+        month_text = d.get('month')        
+        month = months.index(month_text) + 1 if month_text in months else 1
+        rec = {            
+            "period_end":datetime(year, int(month), calendar.monthrange(year, int(month))[1]).date()
+        }
+        if code=='group_code':
+            rec["group_code"] = group_dict.get(d.get('group'))            
+            #add all item_weights_df for item_code starting with rec["group_code"]
+            rec["weight"] = item_weights_df[item_weights_df['item_code'].str.startswith(rec["group_code"])]['weight'].sum()
+        elif code=='subgroup_code':
+            rec["subgroup_code"] = subgroup_dict.get(d.get('subgroup'))
+            rec["weight"] = item_weights_df[item_weights_df['item_code'].str.startswith(rec["subgroup_code"])]['weight'].sum()
+        elif code=='item_code':
+            rec["item_code"] = item_dict.get(d.get('item'))
+            rec["weight"] = item_weights_df[item_weights_df['item_code'] == rec["item_code"]]['weight'].sum()
+
+        rec["CPI"] = float(d.get('index', 0))
+        rec["CPI_YoY"] = float(d.get('inflation', 0))        
+        recs.append(rec)
+
+    return recs
+
+# Calculates all the as-reported values
+#async def as_reported(metadata):
+
+
+
+
+
+# Functions to calculate each aggregates for each group
+async def food_and_beverages_inflation(start_from, item_weights_df, group_dict, subgroup_dict, item_dict):    
+    # Food And Beverages is a group in CPI    
+    group_url = f"{cpi_api}/getCPIIndex"
+    item_url = f"{cpi_api}/getItemIndex"
+
+    #for each month starting start_from to today    
+    group_params = {
+        "base_year": "2012",
+        "series": "Current",
+        "Format": "json",
+        "group_code": "1",
+        "subgroup_code": "1.99",  # Food and Beverages
+        "state_code": "99",  # All India
+        "sector_code": "3"  # Combined
+    }
+
+    item_params = {
+        "base_year": "2012",
+        "Format": "json"
+    }
+
+    #All the alcoholic beverages
+    item_codes = ["2.1.01.1.1.01.0", "2.1.01.1.1.02.0", "2.1.01.1.1.03.0", "2.1.01.1.1.04.0", "2.1.01.1.1.05.0"]
+
+    group_tasks = []
+    item_tasks = []
+
+    for period in get_periods(start_from):
+        group_params = group_params.copy()                
+        group_params.update(period)        
+        group_tasks.append(one_request(group_url, group_params))
+
+        for item_code in item_codes:
+            item_params = item_params.copy()
+            item_params.update(period)
+            item_params["item_code"] = item_code
+            item_tasks.append(one_request(item_url, item_params))
+    
+    results = await asyncio.gather(*group_tasks, *item_tasks)    
+    recs = []
+    for i, result in enumerate(results):        
+        if result is None:
+            continue
+        # df will have period_end, group_code, item_code, subgroup_code, cpi, yoy, weight
+        if i < len(group_tasks):
+            # Group results
+            data = result.get('data', [])            
+            recs.extend(process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, code='group_code'))            
+        else:
+            # Item results
+            data = result.get('data', [])
+            recs.extend(process_data(data, group_dict, subgroup_dict, item_dict, item_weights_df, code='item_code'))
+    
+    # Convert recs to DataFrame
+    df = pd.DataFrame(recs)
+    if df.empty:
+        print("No data found for Food and Beverages inflation.")
+        return None    
+    
+    return df
+
+async def update():
+    metadata_df = get_metadata()        
+    '''
     start_date = datetime(2020, 1, 1)
-    item_weight = get_item_weights()
+    item_weights = get_item_weights()
     item_inflation_df = get_item_inflation(start_date, datetime.now())
     group_inflation_df = get_group_inflation(start_date, datetime.now(), sector="Combined")
     #save as 3 CSV files
-    item_weight.to_csv('item_weights.csv', index=False)
-    item_inflation_df.to_csv('item_inflation.csv', index=False)
-    group_inflation_df.to_csv('group_inflation.csv', index=False)
+    #save with delimiter '|'
+    item_weights.to_csv('item_weights.csv', index=False, sep='|')
+    item_inflation_df.to_csv('item_inflation.csv', index=False, sep='|')
+    group_inflation_df.to_csv('group_inflation.csv', index=False, sep='|')
+    '''    
+
+    #item_weights_df = pd.read_csv('item_weights.csv', delimiter='|')
+    item_weights_df = get_item_weights()    
+    
+    # Step 1: Update weights for item_code rows using item_weights_df
+    item_mask = metadata_df['codetype'] == 'item_code'
+    
+    metadata_df.loc[item_mask, 'weight'] = metadata_df.loc[item_mask].merge(
+        item_weights_df[['item_code', 'weight']],
+        left_on='code',             # this is the item_code in metadata_df
+        right_on='item_code',       # this is the item_code in item_weights_df
+        how='left'
+    )['weight'].values
+
+    #iterate and calculate group_code and subgroup_code weights
+    group_dict = metadata_df[metadata_df['codetype'] == 'group_code'].set_index('codetype')['label'].to_dict()
+    subgroup_dict = metadata_df[metadata_df['codetype'] == 'subgroup_code'].set_index('codetype')['label'].to_dict()    
+    
+    for group_code in group_dict.keys():
+        metadata_df.loc[metadata_df['codetype'] == group_code, 'weight'] = item_weights_df[item_weights_df['item_code'].str.startswith(group_code)]['weight'].sum()
+    
+    for subgroup_code in subgroup_dict.keys():
+        metadata_df.loc[metadata_df['codetype'] == subgroup_code, 'weight'] = item_weights_df[item_weights_df['item_code'].str.startswith(subgroup_code)]['weight'].sum()
+    
+    metadata_df['region'] = 'combined'    
+
+    group_weights_df = get_group_weights()
+    
+    #concat metadata_df and group_weights_df
+    metadata_df = pd.concat([metadata_df, group_weights_df], ignore_index=True)
+    
+    # Final step: Save to CSV
+    metadata_df.to_csv('metadata.csv', index=False, sep='|')
+    
+    
+    
+    
+    #calculate subgroup_code weights - by using the code as startswith filter
+    
+    '''
+    item_inflation_df = pd.read_csv('item_inflation.csv', delimiter='|')
+    group_inflation_df = pd.read_csv('group_inflation.csv', delimiter='|')
+    
+
+    #add item_weights to item_inflation_df
+    #only add the weights column - item_code is the key
+    item_inflation_df = item_inflation_df.merge(item_weights[['item_code', 'weight']], on='item_code', how='left')    
+    item_inflation_df['period_end'] = pd.to_datetime(item_inflation_df['period_end'], errors='coerce')    
+    #save this file
+    item_inflation_df.to_csv('item_inflation_with_weights.csv', index=False, sep='|')    
+    #print(item_inflation_df[['period_end'] == datetime(2025,6, 30)])    
+    print (food_and_beverages_inflation(item_inflation_df))
+
     print("Data updated successfully.")
+    '''
+    #df = await food_and_beverages_inflation(datetime(2025, 6, 1), item_weights_df, group_dict, subgroup_dict, item_dict)
+    #df.to_csv('food_and_beverages_inflation.csv', index=False, sep='|')
     
 
 

@@ -1,0 +1,382 @@
+code|label|codetype|weight|region
+0.|General|group_code|0.0|combined
+1.|Food and Beverages|group_code|0.0|combined
+2.|Pan, Tobacco and Intoxicants|group_code|0.0|combined
+3.|Clothing and Footwear|group_code|0.0|combined
+4.|Housing|group_code|0.0|combined
+5.|Fuel and Light|group_code|0.0|combined
+6.|Miscellaneous|group_code|0.0|combined
+7.|Consumer Food Price|group_code|0.0|combined
+1.1.01.|Cereals and Products|subgroup_code|0.0|combined
+1.1.02.|Meat and Fish|subgroup_code|0.0|combined
+1.1.03.|Egg|subgroup_code|0.0|combined
+1.1.04.|Milk and Products|subgroup_code|0.0|combined
+1.1.05.|Oils and Fats|subgroup_code|0.0|combined
+1.1.06.|Fruits|subgroup_code|0.0|combined
+1.1.07.|Vegetables|subgroup_code|0.0|combined
+1.1.08.|Pulses and Products|subgroup_code|0.0|combined
+1.1.09.|Sugar and Confectionery|subgroup_code|0.0|combined
+1.1.10.|Spices|subgroup_code|0.0|combined
+1.1.12.|Prepared Meals, Snacks, Sweets etc.|subgroup_code|0.0|combined
+1.2.11.|Non-alcoholic Beverages|subgroup_code|0.0|combined
+3.1.01.|Clothing|subgroup_code|0.0|combined
+3.1.02.|Footwear|subgroup_code|0.0|combined
+6.1.01.|Household Goods and Services|subgroup_code|0.0|combined
+6.1.02.|Health|subgroup_code|0.0|combined
+6.1.03.|Transport and Communication|subgroup_code|0.0|combined
+6.1.04.|Recreation and Amusement|subgroup_code|0.0|combined
+6.1.05.|Education|subgroup_code|0.0|combined
+6.1.06.|Personal Care and Effects|subgroup_code|0.0|combined
+1.1.01.1.1.01.P|Rice – PDS|item_code|0.37094|combined
+1.1.01.1.1.02.X|Rice – Other Sources|item_code|4.37809|combined
+1.1.01.1.1.03.0|Chira|item_code|0.09524|combined
+1.1.01.1.1.05.0|Muri|item_code|0.11109|combined
+1.1.01.1.1.06.0|Other Rice Products|item_code|0.01765|combined
+1.1.01.1.1.07.P|Wheat/ Atta – PDS|item_code|0.17389|combined
+1.1.01.1.1.08.X|Wheat/ Atta – Other Sources|item_code|2.56052|combined
+1.1.01.1.1.09.0|Maida|item_code|0.03112|combined
+1.1.01.1.1.10.0|Suji, Rawa|item_code|0.09511|combined
+1.1.01.1.1.11.X|Sewai, Noodles|item_code|0.03381|combined
+1.1.01.1.1.12.0|Bread (bakery)|item_code|0.10816|combined
+1.1.01.1.1.13.X|Biscuits, Chocolates, etc.|item_code|0.88308|combined
+1.1.01.1.1.15.0|Other Cereals|item_code|0.00116|combined
+1.1.01.1.1.16.0|Cereal Substitutes: Tapioca, etc.|item_code|0.04756|combined
+1.1.01.2.1.01.X|Jowar & its Products|item_code|0.22633|combined
+1.1.01.2.1.02.X|Bajra & its Products|item_code|0.11249|combined
+1.1.01.2.1.03.X|Maize & Products|item_code|0.05711|combined
+1.1.01.2.1.05.X|Small Millets & their Products|item_code|0.00024|combined
+1.1.01.2.1.06.X|Ragi & its Products|item_code|0.04578|combined
+1.1.01.3.2.01.0|Grinding Charges|item_code|0.3242|combined
+1.1.02.1.1.01.0|Goat Meat/mutton|item_code|0.79377|combined
+1.1.02.1.1.02.X|Beef/ Buffalo Meat|item_code|0.26752|combined
+1.1.02.1.1.03.0|Pork|item_code|0.05177|combined
+1.1.02.1.1.04.0|Chicken|item_code|1.22723|combined
+1.1.02.1.1.05.0|Others: Birds, Crab, Oyster, Tortoise, etc.|item_code|0.00557|combined
+1.1.02.2.1.01.X|Fish, Prawn|item_code|1.26713|combined
+1.1.03.1.1.01.0|Eggs (no.)|item_code|0.43085|combined
+1.1.04.1.1.01.X|Milk: Liquid (litre)|item_code|6.41886|combined
+1.1.04.2.1.01.0|Baby Food|item_code|0.02533|combined
+1.1.04.2.1.02.X|Milk: Condensed/ Powder|item_code|0.04114|combined
+1.1.04.2.1.03.0|Curd|item_code|0.09422|combined
+1.1.04.2.1.04.0|Other Milk Products|item_code|0.02747|combined
+1.1.05.1.1.01.0|Mustard Oil|item_code|1.32678|combined
+1.1.05.1.1.02.0|Groundnut Oil|item_code|0.33277|combined
+1.1.05.1.1.03.0|Coconut Oil|item_code|0.07884|combined
+1.1.05.1.1.04.0|Refined Oil [sunflower, Soyabean, Saffola, Etc.]|item_code|1.26238|combined
+1.1.05.2.1.01.0|Ghee|item_code|0.47445|combined
+1.1.05.2.1.02.0|Butter|item_code|0.01041|combined
+1.1.05.2.1.03.0|Vanaspati, Margarine|item_code|0.07187|combined
+1.1.06.1.1.01.0|Banana (no.)|item_code|0.5598|combined
+1.1.06.1.1.02.0|Jackfruit|item_code|0.00414|combined
+1.1.06.1.1.03.0|Watermelon|item_code|0.04684|combined
+1.1.06.1.1.04.0|Pineapple (no.)|item_code|0.0037|combined
+1.1.06.1.1.05.0|Coconut (no.)|item_code|0.26253|combined
+1.1.06.1.1.06.0|Green Coconut (no.)|item_code|0.04587|combined
+1.1.06.1.1.07.0|Guava|item_code|0.08133|combined
+1.1.06.1.1.08.0|Singara|item_code|0.00211|combined
+1.1.06.1.1.09.X|Orange, Mausami (no.)|item_code|0.12518|combined
+1.1.06.1.1.10.0|Papaya|item_code|0.04744|combined
+1.1.06.1.1.11.0|Mango|item_code|0.32017|combined
+1.1.06.1.1.12.0|Kharbooza|item_code|0.01243|combined
+1.1.06.1.1.13.X|Pears/nashpati|item_code|0.00054|combined
+1.1.06.1.1.14.0|Berries|item_code|0.00139|combined
+1.1.06.1.1.15.0|Leechi|item_code|0.00849|combined
+1.1.06.1.1.16.0|Apple|item_code|0.47018|combined
+1.1.06.1.1.17.0|Grapes|item_code|0.1534|combined
+1.1.06.1.1.18.0|Other Fresh Fruits|item_code|0.11939|combined
+1.1.06.2.1.01.0|Coconut: Copra|item_code|0.10068|combined
+1.1.06.2.1.02.0|Groundnut|item_code|0.28769|combined
+1.1.06.2.1.03.0|Dates|item_code|0.04157|combined
+1.1.06.2.1.04.0|Cashewnut|item_code|0.07743|combined
+1.1.06.2.1.05.0|Walnut|item_code|0.00271|combined
+1.1.06.2.1.06.0|Other Nuts|item_code|0.01424|combined
+1.1.06.2.1.07.X|Raisin, Kishmish, Monacca, etc.|item_code|0.05616|combined
+1.1.06.2.1.08.0|Other Dry Fruits|item_code|0.04598|combined
+1.1.07.1.1.01.0|Potato|item_code|0.98404|combined
+1.1.07.1.1.02.0|Onion|item_code|0.64409|combined
+1.1.07.1.1.03.0|Radish|item_code|0.07207|combined
+1.1.07.1.1.04.0|Carrot|item_code|0.09395|combined
+1.1.07.1.1.05.0|Garlic (gm)|item_code|0.31022|combined
+1.1.07.1.1.06.0|Ginger (gm)|item_code|0.19177|combined
+1.1.07.2.1.01.X|Palak/other Leafy Vegetables|item_code|0.43849|combined
+1.1.07.3.1.01.0|Tomato|item_code|0.57488|combined
+1.1.07.3.1.02.0|Brinjal|item_code|0.36816|combined
+1.1.07.3.1.03.0|Cauliflower|item_code|0.24628|combined
+1.1.07.3.1.04.0|Cabbage|item_code|0.18139|combined
+1.1.07.3.1.05.0|Green Chillies|item_code|0.2789|combined
+1.1.07.3.1.06.0|Lady's Finger|item_code|0.28287|combined
+1.1.07.3.1.07.X|Parwal/patal, Kundru|item_code|0.09627|combined
+1.1.07.3.1.08.X|Gourd, Pumpkin|item_code|0.23613|combined
+1.1.07.3.1.09.0|Peas (vegetables)|item_code|0.1032|combined
+1.1.07.3.1.10.X|Beans, Barbati|item_code|0.14247|combined
+1.1.07.3.1.11.0|Lemon (no.)|item_code|0.12705|combined
+1.1.07.3.1.12.X|Other Vegetables|item_code|0.56483|combined
+1.1.07.4.1.01.0|Pickles (gm)|item_code|0.09465|combined
+1.1.07.4.1.02.0|Chips (gm)|item_code|0.00764|combined
+1.1.08.1.1.01.0|Arhar, Tur|item_code|0.79607|combined
+1.1.08.1.1.02.0|Gram: Split|item_code|0.19899|combined
+1.1.08.1.1.03.0|Gram: Whole|item_code|0.0948|combined
+1.1.08.1.1.04.0|Moong|item_code|0.34532|combined
+1.1.08.1.1.05.0|Masur|item_code|0.30213|combined
+1.1.08.1.1.06.0|Urd|item_code|0.27353|combined
+1.1.08.1.1.07.0|Peas (pulses)|item_code|0.06756|combined
+1.1.08.1.1.08.0|Khesari|item_code|0.01151|combined
+1.1.08.1.1.09.X|Other Pulses|item_code|0.08299|combined
+1.1.08.2.1.01.0|Gram Products|item_code|0.02327|combined
+1.1.08.2.1.02.0|Besan|item_code|0.15725|combined
+1.1.08.2.1.03.0|Other Pulse Products|item_code|0.03066|combined
+1.1.09.1.1.01.P|Sugar - PDS|item_code|0.08755|combined
+1.1.09.1.1.02.0|Sugar - Other Sources|item_code|1.13403|combined
+1.1.09.1.1.03.0|Gur|item_code|0.10303|combined
+1.1.09.2.1.01.0|Candy, Misri|item_code|0.00117|combined
+1.1.09.2.1.02.0|Honey|item_code|0.00327|combined
+1.1.09.2.1.03.X|Sauce, Jam, Jelly (gm)|item_code|0.02341|combined
+1.1.09.3.1.01.0|Ice-cream|item_code|0.01163|combined
+1.1.10.1.1.01.0|Salt|item_code|0.15947|combined
+1.1.10.1.1.02.0|Jeera (gm)|item_code|0.37183|combined
+1.1.10.1.1.03.0|Dhania (gm)|item_code|0.33415|combined
+1.1.10.1.1.04.0|Turmeric (gm)|item_code|0.49651|combined
+1.1.10.1.1.05.0|Black Pepper (gm)|item_code|0.13988|combined
+1.1.10.1.1.06.0|Dry Chillies (gm)|item_code|0.5751|combined
+1.1.10.1.1.07.0|Tamarind (gm)|item_code|0.14786|combined
+1.1.10.1.1.08.0|Curry Powder (gm)|item_code|0.1796|combined
+1.1.10.1.1.09.0|Oilseeds (gm)|item_code|0.09063|combined
+1.1.12.1.1.01.0|Tea: Cups (no.)|item_code|0.855|combined
+1.1.12.1.1.02.0|Coffee: Cups (no.)|item_code|0.01961|combined
+1.1.12.2.1.01.0|Cooked Meals Purchased (no.)|item_code|2.42472|combined
+1.1.12.3.1.01.X|Cooked Snacks Purchased [samosa, Puri, Paratha, Burger, Chowmein, Idli, Dosa, Vada, Chops, Pakoras, Pao Bhaji, Etc.]|item_code|1.16057|combined
+1.1.12.3.1.03.X|Prepared Sweets, Cake, Pastry|item_code|0.55402|combined
+1.1.12.3.1.04.0|Papad, Bhujia, Namkeen, Mixture, Chanachur|item_code|0.45658|combined
+1.1.12.3.1.05.0|Other Packaged Processed Food|item_code|0.0782|combined
+1.2.11.1.1.01.0|Tea: Leaf (gm)|item_code|0.9578|combined
+1.2.11.1.1.02.0|Coffee: Powder (gm)|item_code|0.0587|combined
+1.2.11.2.1.01.0|Mineral Water (litre)|item_code|0.01601|combined
+1.2.11.2.1.02.X|Cold Beverages: Bottled/canned (litre)|item_code|0.0885|combined
+1.2.11.2.1.03.X|Fruit Juice and Shake (litre)|item_code|0.05149|combined
+1.2.11.2.1.04.X|Other Beverages: Cocoa, Chocolate, etc.|item_code|0.08627|combined
+2.1.01.1.1.01.0|Country Liquor (litre)|item_code|0.35366|combined
+2.1.01.1.1.02.0|Foreign/refined Liquor or Wine (litre)|item_code|0.40344|combined
+2.1.01.1.1.03.0|Toddy (litre)|item_code|0.05788|combined
+2.1.01.1.1.04.0|Beer (litre)|item_code|0.05932|combined
+2.1.01.1.1.05.0|Other Intoxicants|item_code|0.07639|combined
+2.1.01.2.1.01.0|Pan: Leaf (no.)|item_code|0.06396|combined
+2.1.01.2.1.02.0|Pan: Finished (no.)|item_code|0.15533|combined
+2.1.01.2.1.03.X|Ingredients for Pan (gm)|item_code|0.13113|combined
+2.1.01.3.1.01.0|Bidi (no.)|item_code|0.42638|combined
+2.1.01.3.1.02.X|Cigarettes (no.)|item_code|0.22928|combined
+2.1.01.3.1.03.0|Leaf Tobacco (gm)|item_code|0.0999|combined
+2.1.01.3.1.04.0|Snuff (gm)|item_code|0.00056|combined
+2.1.01.3.1.05.0|Hookah Tobacco (gm)|item_code|0.00581|combined
+2.1.01.3.1.06.0|Cheroot (no.)|item_code|0.00424|combined
+2.1.01.3.1.07.0|Zarda, Kimam, Surti (gm)|item_code|0.04869|combined
+2.1.01.3.1.08.0|Other Tobacco Products|item_code|0.26361|combined
+3.1.01.1.1.01.0|Dhoti (no.)|item_code|0.07465|combined
+3.1.01.1.1.02.0|Saree (no.)|item_code|0.89661|combined
+3.1.01.1.1.03.X|Shawl, Chaddar (no.)|item_code|0.0823|combined
+3.1.01.1.1.04.0|Lungi (no.)|item_code|0.11463|combined
+3.1.01.1.1.05.0|Kurta-pajama Suits: Males (no.)|item_code|0.0553|combined
+3.1.01.1.1.06.X|Shirts, T-shirts (no.)|item_code|0.56646|combined
+3.1.01.1.1.07.X|Shorts, Trousers, Bermudas (no.)|item_code|0.55365|combined
+3.1.01.1.1.08.X|Baniyan, Socks, Other Hosiery and Undergarments, Etc.(no.)|item_code|0.49077|combined
+3.1.01.1.1.09.0|Kurta-pajama Suits: Females (no.)|item_code|0.22295|combined
+3.1.01.1.1.10.0|Frocks, Skirts, etc. (no.)|item_code|0.15122|combined
+3.1.01.1.1.13.0|School/college Uniform: Boys|item_code|0.1697|combined
+3.1.01.1.1.14.0|School/college Uniform: Girls|item_code|0.1353|combined
+3.1.01.2.1.01.X|Coat, Jacket, Sweater, Windcheater (no.)|item_code|0.19627|combined
+3.1.01.2.1.02.0|Knitting Wool (gm)|item_code|0.00029|combined
+3.1.01.3.1.03.X|Cloth for Shirt, Pyjama, Kurta, Salwar, etc. (metre)|item_code|0.67661|combined
+3.1.01.3.1.04.X|Cloth for Coat, Trousers, Suit, etc. (metre)|item_code|0.42346|combined
+3.1.01.3.1.06.0|Clothing (first-hand): Other|item_code|0.05151|combined
+3.1.01.3.1.07.0|Clothing: Second-hand|item_code|0.01268|combined
+3.1.01.3.1.08.X|Gamchha, Towel, Handkerchief (no.)|item_code|0.17775|combined
+3.1.01.3.1.09.X|Headwear, Belts, Ties (no.)|item_code|0.01145|combined
+3.1.01.4.2.01.X|Washerman, Laundry, Ironing|item_code|0.12458|combined
+3.1.01.4.2.02.X|Tailor|item_code|0.38901|combined
+3.1.02.1.1.01.X|Leather Boots, Shoes|item_code|0.20891|combined
+3.1.02.1.1.02.X|Leather Sandals, Chappals, etc.|item_code|0.18209|combined
+3.1.02.1.1.03.0|Other Leather Footwear|item_code|0.07541|combined
+3.1.02.1.1.04.X|Rubber / Pvc Footwear|item_code|0.31248|combined
+3.1.02.1.1.05.0|Other Footwear|item_code|0.17108|combined
+4.1.01.1.2.01.X|House Rent, Garage Rent|item_code|9.51042|combined
+4.1.01.2.2.01.X|Residential Building & Land (cost of Repairs Only)|item_code|0.28319|combined
+4.1.01.2.2.02.X|Water Charges|item_code|0.16136|combined
+4.1.01.2.2.03.0|Watch Man Charges (other Cons Taxes)|item_code|0.11478|combined
+5.1.01.1.1.01.0|Electricity (std. Unit)|item_code|2.26042|combined
+5.1.01.2.1.01.X|LPG [excl. Conveyance]|item_code|1.28621|combined
+5.1.01.3.1.01.P|Kerosene – PDS (litre)|item_code|0.34162|combined
+5.1.01.3.1.02.0|Kerosene – Other Sources (litre)|item_code|0.20712|combined
+5.1.01.3.1.04.0|Diesel (litre) [excl. Conveyance]|item_code|0.00243|combined
+5.1.01.3.1.05.0|Other Fuel|item_code|0.18412|combined
+5.1.01.4.1.01.0|Coke|item_code|0.01073|combined
+5.1.01.4.1.02.0|Firewood and Chips|item_code|2.06755|combined
+5.1.01.4.1.03.0|Coal|item_code|0.03865|combined
+5.1.01.4.1.04.0|Charcoal|item_code|0.00229|combined
+5.1.01.4.1.05.0|Dung Cake|item_code|0.44196|combined
+6.1.01.1.1.01.0|Bedstead|item_code|0.05715|combined
+6.1.01.1.1.02.0|Almirah, Dressing Table|item_code|0.03343|combined
+6.1.01.1.1.03.X|Chair, Stool, Bench, Table|item_code|0.01531|combined
+6.1.01.1.1.06.0|Other Furniture & Fixtures (couch, Sofa, Etc.)|item_code|0.02471|combined
+6.1.01.1.1.07.0|Bathroom and Sanitary Equipment|item_code|0.00221|combined
+6.1.01.1.1.09.X|Carpet, Daree & Other Floor Mattings|item_code|0.00152|combined
+6.1.01.2.1.01.0|Bed Sheet, Bed Cover (no.)|item_code|0.18315|combined
+6.1.01.2.1.02.0|Rug, Blanket (no.)|item_code|0.0732|combined
+6.1.01.2.1.03.X|Pillow, Quilt, Mattress (no.)|item_code|0.04733|combined
+6.1.01.2.1.04.X|Cloth for Upholstery, Curtains, Tablecloth, etc. (metre)|item_code|0.00187|combined
+6.1.01.2.1.05.0|Mosquito Net (no.)|item_code|0.01258|combined
+6.1.01.2.1.06.X|Bedding: Others|item_code|0.00055|combined
+6.1.01.3.1.01.X|Air Conditioner, Air Cooler|item_code|0.05368|combined
+6.1.01.3.1.02.0|Inverter|item_code|0.04317|combined
+6.1.01.3.1.03.0|Sewing Machine|item_code|0.00077|combined
+6.1.01.3.1.04.0|Washing Machine|item_code|0.02372|combined
+6.1.01.3.1.05.X|Stove, Gas Burner|item_code|1e-05|combined
+6.1.01.3.1.06.0|Refrigerator|item_code|0.09167|combined
+6.1.01.3.1.07.0|Electric Fan|item_code|0.01542|combined
+6.1.01.3.1.08.0|Water Purifier|item_code|0.00939|combined
+6.1.01.3.1.09.X|Electric Iron, Heater, Toaster, Oven & Other Electric Heating Appliances|item_code|0.00232|combined
+6.1.01.3.1.10.0|Other Cooking/ Household Appliances|item_code|0.00539|combined
+6.1.01.3.1.12.0|Other Durables (specify)….|item_code|0.00432|combined
+6.1.01.4.1.01.X|Stainless Steel Utensils|item_code|0.17955|combined
+6.1.01.4.1.02.0|Pressure Cooker/ Pressure Pan|item_code|0.00023|combined
+6.1.01.4.1.03.0|Other Metal Utensils|item_code|0.0127|combined
+6.1.01.4.1.05.0|Other Crockery & Utensils|item_code|0.01247|combined
+6.1.01.4.1.06.0|Earthenware|item_code|0.02858|combined
+6.1.01.4.1.07.0|Glassware|item_code|0.00143|combined
+6.1.01.5.1.01.X|Electric Bulb, Tubelight|item_code|0.18174|combined
+6.1.01.5.1.02.0|Plugs, Switches & Other Electrical Fittings|item_code|0.00391|combined
+6.1.01.5.1.03.0|Electric Batteries|item_code|0.01063|combined
+6.1.01.5.1.04.0|Torch|item_code|0.04562|combined
+6.1.01.5.1.05.0|Lock|item_code|0.0014|combined
+6.1.01.6.1.01.X|Bucket, Water Bottle/ Feeding Bottle & Other Plastic Goods|item_code|0.06602|combined
+6.1.01.6.1.02.0|Coir, Rope, etc.|item_code|0.0038|combined
+6.1.01.6.1.03.0|Washing Soap/soda/powder|item_code|0.86658|combined
+6.1.01.6.1.04.0|Other Washing Requisites|item_code|0.11649|combined
+6.1.01.6.1.05.X|Incense (agarbatti), Room Freshener|item_code|0.2037|combined
+6.1.01.6.1.06.0|Flower (fresh): All Purposes|item_code|0.09094|combined
+6.1.01.6.1.07.0|Mosquito Repellent, Insecticide, Acid etc.|item_code|0.12291|combined
+6.1.01.6.1.08.0|Matches (box)|item_code|0.08463|combined
+6.1.01.6.1.09.0|Candle (no.)|item_code|0.03267|combined
+6.1.01.6.1.10.0|Other Petty Articles|item_code|0.15756|combined
+6.1.01.7.2.01.X|Domestic Servant/cook|item_code|0.63912|combined
+6.1.01.7.2.03.0|Sweeper|item_code|0.04121|combined
+6.1.01.7.2.05.0|Monthly Maintainance Charges|item_code|0.03951|combined
+6.1.01.7.2.07.X|Other Consumer Services Excluding Conveyance|item_code|0.15721|combined
+6.1.02.1.2.05.X|Hospital & Nursing Home Charges|item_code|0.44057|combined
+6.1.02.2.1.01.X|Medicine (non-institutional)|item_code|4.01148|combined
+6.1.02.2.1.03.X|Family Planning Devices|item_code|0.00021|combined
+6.1.02.2.1.04.0|Spectacles|item_code|0.0561|combined
+6.1.02.2.2.06.0|Other Medical Expenses (non-institutional)|item_code|0.11599|combined
+6.1.02.2.2.07.0|Doctor’s/ Surgeon’s Fee-first Consultation (non-institutional)|item_code|0.79049|combined
+6.1.02.2.2.08.X|X-ray, Ecg, Pathological Test, etc. (non-institutional)|item_code|0.47597|combined
+6.1.03.1.1.01.0|Motor Car, Jeep|item_code|0.48053|combined
+6.1.03.1.1.02.X|Motor Cycle, Scooter|item_code|0.79266|combined
+6.1.03.1.1.03.0|Bicycle(without Accessories)|item_code|0.13011|combined
+6.1.03.1.1.05.X|Tyres & Tubes|item_code|0.07221|combined
+6.1.03.2.1.01.0|Petrol for Vehicle|item_code|2.18697|combined
+6.1.03.2.1.02.0|Diesel for Vehicle|item_code|0.148|combined
+6.1.03.2.1.03.X|Lubricants & Other Fuels for Vehicle|item_code|0.05002|combined
+6.1.03.2.2.04.0|Other Conveyance Expenses|item_code|0.00985|combined
+6.1.03.3.2.01.X|Railway Fare|item_code|0.18495|combined
+6.1.03.3.2.02.0|Bus/tram Fare|item_code|1.36717|combined
+6.1.03.3.2.03.X|Taxi, Auto-rickshaw Fare|item_code|0.56825|combined
+6.1.03.3.2.04.0|Rickshaw (hand Drawn & Cycle) Fare|item_code|0.04553|combined
+6.1.03.3.2.05.0|Horse Cart Fare|item_code|0.00386|combined
+6.1.03.3.2.06.0|School Bus, Van, etc.|item_code|0.24583|combined
+6.1.03.3.2.07.0|Air Fare (normal): Economy Class(adult)|item_code|0.07722|combined
+6.1.03.3.2.08.0|Steamer, Boat Fare|item_code|0.00043|combined
+6.1.03.3.2.09.0|Porter Charges|item_code|0.00199|combined
+6.1.03.4.1.01.0|Mobile Handset|item_code|0.13506|combined
+6.1.03.5.2.01.0|Telephone Charges: Landline*|item_code|0.17064|combined
+6.1.03.5.2.02.X|Telephone Charges: Mobile|item_code|1.83916|combined
+6.1.03.5.2.03.0|Internet Expenses|item_code|0.08004|combined
+6.1.04.1.1.01.X|Radio, Tape Recorder, 2-in-1|item_code|0.00345|combined
+6.1.04.1.1.02.0|Television|item_code|0.16209|combined
+6.1.04.1.1.03.0|Vcr/vcd/dvd Player|item_code|0.00579|combined
+6.1.04.1.1.05.X|Camera & Photographic Equipment|item_code|0.003|combined
+6.1.04.1.1.06.X|Pc/ Laptop/ Other Peripherals Incl. Software|item_code|0.11073|combined
+6.1.04.1.1.07.0|CD, DVD, Audio/video Cassette, etc|item_code|0.00469|combined
+6.1.04.1.1.11.0|Goods for Recreation and Hobbies|item_code|0.00156|combined
+6.1.04.1.1.12.X|Sports Goods, Toys, etc.|item_code|0.11243|combined
+6.1.04.1.1.14.X|Newspapers, Periodicals|item_code|0.18135|combined
+6.1.04.1.2.04.0|Photography|item_code|0.02008|combined
+6.1.04.1.2.08.0|Vcd/ DVD Hire (incl. Instrument)|item_code|0.0028|combined
+6.1.04.2.2.01.0|Cinema: New Release(normal Day)|item_code|0.1307|combined
+6.1.04.2.2.02.0|Monthly Charges for Cable Tv Connection|item_code|0.82005|combined
+6.1.04.2.2.04.0|Library Charges|item_code|2e-05|combined
+6.1.04.2.2.05.0|Other Entertainment|item_code|0.11324|combined
+6.1.04.2.2.06.0|Club Fees|item_code|0.00146|combined
+6.1.04.2.2.07.0|Hotel Lodging Charges|item_code|0.00904|combined
+6.1.05.1.1.02.X|Books, Journals: First Hand|item_code|0.55902|combined
+6.1.05.1.1.04.X|Stationery, Photocopying Charges|item_code|0.388|combined
+6.1.05.2.2.01.X|Tuition and Other Fees (school, College, Etc.)|item_code|2.89814|combined
+6.1.05.2.2.02.X|Private Tutor/ Coaching Centre|item_code|0.57665|combined
+6.1.05.2.2.03.0|Other Educational Expenses (incl. Fees for Enrollment in Web-based Training)|item_code|0.04018|combined
+6.1.06.1.1.01.0|Toilet Soap|item_code|0.63817|combined
+6.1.06.1.1.02.X|Toothpaste, Toothbrush, Comb, etc.|item_code|0.35605|combined
+6.1.06.1.1.03.X|Powder, Snow, Cream, Lotion and Perfume|item_code|0.39324|combined
+6.1.06.1.1.04.X|Hair Oil, Shampoo, Hair Cream|item_code|0.45016|combined
+6.1.06.1.1.05.X|Shaving Blades, Shaving Stick, Razor|item_code|0.09756|combined
+6.1.06.1.1.06.X|Shaving Cream, Aftershave Lotion|item_code|0.04408|combined
+6.1.06.1.1.07.0|Sanitary Napkins|item_code|0.08921|combined
+6.1.06.1.1.09.X|Clock, Watch|item_code|0.00017|combined
+6.1.06.1.1.10.X|Suitcase, Trunk, Box, Handbag and Other Travel Goods|item_code|0.00161|combined
+6.1.06.1.1.11.X|Umbrella, Raincoat|item_code|0.06197|combined
+6.1.06.1.1.12.X|Lighter (bidi/ Cigarette/ Gas Stove)|item_code|0.00029|combined
+6.1.06.1.1.14.X|Any Other Personal Goods|item_code|3e-05|combined
+6.1.06.2.1.01.0|Gold|item_code|1.08035|combined
+6.1.06.2.1.02.0|Silver|item_code|0.11175|combined
+6.1.06.2.1.04.0|Other Ornaments|item_code|0.01157|combined
+6.1.06.3.2.01.X|Barber, Beautician, etc.|item_code|0.5517|combined
+1.1.01|Cereals and products|subgroup_code|12.35|rural
+1.1.02|Meat and fish|subgroup_code|4.38|rural
+1.1.03|Egg|subgroup_code|0.49|rural
+1.1.04|Milk and products|subgroup_code|7.72|rural
+1.1.05|Oils and fats|subgroup_code|4.21|rural
+1.1.06|Fruits|subgroup_code|2.88|rural
+1.1.07|Vegetables|subgroup_code|7.46|rural
+1.1.08|Pulses and products|subgroup_code|2.95|rural
+1.1.09|Sugar and confectionery|subgroup_code|1.7|rural
+1.1.10|Spices|subgroup_code|3.11|rural
+1.2.11|Non-alcoholic beverages|subgroup_code|1.37|rural
+1.1.12|Prepared meals, snacks, sweets etc.|subgroup_code|5.56|rural
+nan|Food and beverages|subgroup_code|54.18|rural
+nan|Pan, tobacco and intoxicants|subgroup_code|3.26|rural
+3.1.01|Clothing|subgroup_code|6.32|rural
+3.1.02|Footwear|subgroup_code|1.04|rural
+nan|Clothing and footwear|subgroup_code|7.36|rural
+nan|Housing|subgroup_code||rural
+nan|Fuel and light|subgroup_code|7.94|rural
+6.1.01|Household goods and services|subgroup_code|3.75|rural
+6.1.02|Health|subgroup_code|6.83|rural
+6.1.03|Transport and communication|subgroup_code|7.6|rural
+6.1.04|Recreation and amusement|subgroup_code|1.37|rural
+6.1.05|Education|subgroup_code|3.46|rural
+6.1.06|Personal care and effects|subgroup_code|4.25|rural
+nan|Miscellaneous|subgroup_code|27.26|rural
+nan|General Index (All Groups)|subgroup_code|100.0|rural
+1.1.01|Cereals and products|subgroup_code|6.59|urban
+1.1.02|Meat and fish|subgroup_code|2.73|urban
+1.1.03|Egg|subgroup_code|0.36|urban
+1.1.04|Milk and products|subgroup_code|5.33|urban
+1.1.05|Oils and fats|subgroup_code|2.81|urban
+1.1.06|Fruits|subgroup_code|2.9|urban
+1.1.07|Vegetables|subgroup_code|4.41|urban
+1.1.08|Pulses and products|subgroup_code|1.73|urban
+1.1.09|Sugar and confectionery|subgroup_code|0.97|urban
+1.1.10|Spices|subgroup_code|1.79|urban
+1.2.11|Non-alcoholic beverages|subgroup_code|1.13|urban
+1.1.12|Prepared meals, snacks, sweets etc.|subgroup_code|5.54|urban
+nan|Food and beverages|subgroup_code|36.29|urban
+nan|Pan, tobacco and intoxicants|subgroup_code|1.36|urban
+3.1.01|Clothing|subgroup_code|4.72|urban
+3.1.02|Footwear|subgroup_code|0.85|urban
+nan|Clothing and footwear|subgroup_code|5.57|urban
+nan|Housing|subgroup_code|21.67|urban
+nan|Fuel and light|subgroup_code|5.58|urban
+6.1.01|Household goods and services|subgroup_code|3.87|urban
+6.1.02|Health|subgroup_code|4.81|urban
+6.1.03|Transport and communication|subgroup_code|9.73|urban
+6.1.04|Recreation and amusement|subgroup_code|2.04|urban
+6.1.05|Education|subgroup_code|5.62|urban
+6.1.06|Personal care and effects|subgroup_code|3.47|urban
+nan|Miscellaneous|subgroup_code|29.53|urban
+nan|General Index (All Groups)|subgroup_code|100.0|urban

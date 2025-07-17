@@ -1,3 +1,9 @@
 from datasets.Inflation import CPI_YoY_IN
+import asyncio
 
-CPI_YoY_IN.update()
+async def main():
+    await CPI_YoY_IN.update()
+
+
+if __name__ == "__main__":    
+    asyncio.run(main())
