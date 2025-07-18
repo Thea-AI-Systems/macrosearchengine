@@ -1,0 +1,4 @@
+{
+    "ticker_prefix": "CPI_YoY",
+    "s3_path":"datasets/Inflation/cpi_yoy"
+}

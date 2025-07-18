@@ -704,22 +704,20 @@ async def _dimension(label, category, metadata_df, inflation_df, filters, calcul
         rec.prep_for_insert()
         records.append(rec.rec)
 
-        #if there are only group filters
-        if all([codetype == "group_code" for codetype, _ in filters]):
-            subgroup_filter = None
-            for codetype, code in filters:
-                if subgroup_filter is None:
-                    subgroup_filter = (inf_copy['codetype'] == "subgroup_code") & (inf_copy['code'].str.startswith(code))
-                else:
-                    subgroup_filter |= (inf_copy['codetype'] == "subgroup_code") & (inf_copy['code'].str.startswith(code))
-            _constituents_subgroup = inf_copy[(inf_copy['period_end'] == inf_copy['period_end'].max()) & subgroup_filter].copy()
-            _constituents_subgroup['weight'] = _constituents_subgroup['weight'] / _constituents_subgroup['weight'].sum()
-            #only label, code, weight
-            _constituents_subgroup = _constituents_subgroup[['code', 'label', 'weight']]
-            for index, row in _constituents_subgroup.iterrows():
-                rec_subgroup.add_constituent(row["label"], row["weight"], "subgroups")
-            rec_subgroup.prep_for_insert()
-            records.append(rec_subgroup.rec)
+        subgroup_filter = None
+        for codetype, code in filters:
+            if subgroup_filter is None:
+                subgroup_filter = (inf_copy['codetype'] == "subgroup_code") & (inf_copy['code'].str.startswith(code))
+            else:
+                subgroup_filter |= (inf_copy['codetype'] == "subgroup_code") & (inf_copy['code'].str.startswith(code))
+        _constituents_subgroup = inf_copy[(inf_copy['period_end'] == inf_copy['period_end'].max()) & subgroup_filter].copy()
+        _constituents_subgroup['weight'] = _constituents_subgroup['weight'] / _constituents_subgroup['weight'].sum()
+        #only label, code, weight
+        _constituents_subgroup = _constituents_subgroup[['code', 'label', 'weight']]
+        for index, row in _constituents_subgroup.iterrows():
+            rec_subgroup.add_constituent(row["label"], row["weight"], "subgroups")
+        rec_subgroup.prep_for_insert()
+        records.append(rec_subgroup.rec)
 
     return records
 
@@ -781,169 +779,706 @@ async def calculate_dimensions(inflation_df=None, metadata_df=None):
         {
             "label":"Seafood",
             "as_reported": True,
-            "filters":[("item_code", "1.1.02.2.")]
-        },
-        {
-            "label":"Eggs",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.03.")]
-        },
-        {
-            "label":"Dairy",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.04.")]
-        },
-        {
-            "label":"Edible_Oils",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.05.")]
-        },
-        {
-            "label":"Fruits",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.06.")]
-        },
-        {
-            "label":"Vegetables",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.07.")]
-        },
-        {           
-            "label":"Sugar_Products",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.09.")]
-        },
-        {
-            "label":"Spices",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.10.")]
-        },
-        {
-            "label":"Packaged_Foods",
-            "as_reported": True,
-            "filters":[("subgroup_code", "1.1.12.")]
-        },
-        {            
-            "label":"Non_Alcoholic_Beverages",
-            "as_reported": True,            
             "filters":[
-                ("subgroup_code", "1.2.11.")
+                ("item_code", "1.1.02.2.")
             ]
         },
         {
-            "label":"Intoxicants_And_Alcoholic_Beverages",
-            "as_reported": True,            
-            "filters":[
-                ("group_code", "2."),
-            ]
-        },
-        {
-            "label":"Apparel",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[
-                ("group_code", "3.")
-            ]
-        },
-        {
-            "label":"Housing_Ex_Electricity",
-            "as_reported": True,
-            "filters":[
-                ("group_code", "4.")
-            ]
-        },
-        {
-            "label":"Housing",
-            "as_reported": False,
-            "inter_country_comparison": True,
-            "filters":[
-                ("group_code", "4."),
-                ("item_code", "5.1.01.1.")
-            ]
-        },
-        {
-            "label":"Electricity_And_Household_Fuel",
-            "as_reported": True,
-            "inter_country_comparison": False,
-            "filters":[
-                ("group_code", "5.")
-            ]
-        },
-        {
-            "label":"Healthcare",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[                
-                ("subgroup_code", "6.1.02.")
-            ]
-        },
-        {
-            "label":"Home_Appliances",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[
-                ("subgroup_code", "6.1.01.3."),
-                ("subgroup_code", "6.1.01.4."),
-                ("subgroup_code", "6.1.01.5."),
-            ]            
-        },
-        {
-            "label":"Transport",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[
-                ("subgroup_code", "6.1.03.")
-            ]
-        },
-        {
-            "label":"Energy",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[
-                ("item_code", "6.1.03.2.1.")
-            ]
-        },
-        {
-            "label":"Communication",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[
-                ("item_code", "6.1.03.5.")
-            ]
-        },
-        {
-            "label":"Miscellaneous",
-            "as_reported": True,            
-            "filters":[
-                ("group_code", "6.")
-            ]
-        },
-        {
-            "label":"Education",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[
-                ("subgroup_code", "6.1.05.")
-            ]
-        },
-        {   
-            "label":"Recreation_And_Entertainment",
-            "as_reported": True,            
-            "filters":[
-                ("subgroup_code", "6.1.04.")
-            ]
-        },
-        {
-            "label":"Personal_Care",
-            "as_reported": True,            
-            "filters":[
-                ("subgroup_code", "6.1.04.")
-            ]
-        },
-        {
-
+            "label":
         }
+    
+
+            
+
+
+            
     ]
+
+    tasks = []
+    for item in items:
+        tasks.append(_dimension(item['label'], metadata_df, inflation_df, item['filters'], item.get('as_repored', False), item.get('inter_country_comparison', False)))
+
+    records = await asyncio.gather(*tasks)
+
+    
+    
+
+
+async def food_and_beverages_inflation(inflation_df=None):
+    # Food And Beverages is a group in CPI
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy() if inflation_df is not None else pd.DataFrame()
+
+    # Food and Beverages excluding Alcoholic Beverages
+    dim = "Food_And_Beverages_Ex_Alcoholic_Beverages"
+    group_code = "1."
+    food_and_beverages_ex_alcohol_filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'] == group_code)
+    _df = inf_copy[food_and_beverages_ex_alcohol_filter].copy()
+    _df['dimensions'] = dim    
+    aggregates.append(_df)
+    _constituents = inf_copy[(inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(group_code))].copy()    
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()    
+    #only label, code, weight    
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')    
+
+    _constituents_subgroup = inf_copy[(inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'].str.startswith(group_code))].copy()
+    _constituents_subgroup['weight'] = _constituents_subgroup['weight'] / _constituents_subgroup['weight'].sum()
+    _constituents_subgroup = _constituents_subgroup[['code', 'label', 'weight']].copy()
+    _constituents_subgroup = _constituents_subgroup.to_dict('records')
+    
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":_constituents,
+            "subgroups":_constituents_subgroup,
+        }        
+    })
+
+    # Food and Beverages including Alcoholic Beverages
+    dim = "Food_And_Beverages"
+    normalized_dimensions.append(dim)    
+    alc_filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith("2.1.01.1."))  # Alcoholic Beverages codes start with "
+    alc_item_codes = inf_copy[alc_filter]['code'].tolist()
+    fb_with_alc_filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'].str.startswith("1.")) | (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].isin(alc_item_codes))
+    _df = inf_copy[fb_with_alc_filter].copy()
+    
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim    
+    aggregates.append(_agg_df)
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Grains
+    dim = "Grains"
+    normalized_dimensions.append(dim)
+    pulses_and_cereals_codes =["1.1.01.", "1.1.08."]
+    grains_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'].isin(pulses_and_cereals_codes))  # Pulses and Cereals codes
+    _df = inf_copy[grains_filter].copy()
+    
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })  
+
+    # Cereals
+    dim = "Cereals"
+    subgroup_code = "1.1.01."    
+    cereals_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Cereals codes start with "1.1.01"
+    _df = inf_copy[cereals_filter].copy()
+    _df['dimensions'] = dim
+    
+    aggregates.append(_df)
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    #only select label, code, weight
+    _constituents = _constituents[['code', 'label', 'weight']].copy()    
+    _constituents = _constituents.to_dict('records')
+
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Pulses
+    dim = "Pulses"
+    subgroup_code = "1.1.08."
+    pulses_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Pulses codes start with "1.1.08"    
+    _df = inf_copy[pulses_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Meat & Fish
+    dim = "Meat_and_Fish" 
+    subgroup_code = "1.1.02."  # Meat and Fish codes start with "1.1.02"
+    _df = inf_copy[(inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Meat
+    dim = "Meat"
+    normalized_dimensions.append(dim)
+    meat_filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith("1.1.02."))  # Meat codes start with "1.1.02"
+    _df = inf_copy[meat_filter].copy()    
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Fish
+    dim = "Seafood"
+    normalized_dimensions.append(dim)
+    seafood_filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith("1.1.03."))  # Seafood codes start with "1.1.03"
+    _df = inf_copy[seafood_filter].copy()    
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Egg
+    dim = "Eggs"
+    normalized_dimensions.append(dim)
+    subgroup_code = "1.1.03."
+    egg_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Eggs codes start with "1.1.03"
+    _df = inf_copy[egg_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()    
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Dairy
+    dim = "Dairy"
+    normalized_dimensions.append(dim)
+    subgroup_code = "1.1.04."
+    dairy_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Dairy codes start with "1.1.04"
+    _df = inf_copy[dairy_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Edible Oils
+    dim = "Edible_Oils"
+    normalized_dimensions.append(dim)
+    subgroup_code = "1.1.05."
+    
+
+
+
+    #df.to_csv('food_and_beverages_inflation.csv', index=False, sep='|')
+    
+
+    edible_oils_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Edible Oils codes start with "1.1.05"
+    _df = inf_copy[edible_oils_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Fruits
+    dim = "Fruits"
+    normalized_dimensions.append(dim)
+    subgroup_code = "1.1.06."
+    fruits_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Fruits codes start with "1.1.06"
+    _df = inf_copy[fruits_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Vegetables
+    dim = "Vegetables"
+    normalized_dimensions.append(dim)
+    subgroup_code = "1.1.07."
+    vegetables_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Vegetables codes start with "1.1.07"
+    _df = inf_copy[vegetables_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Sugarbased Products
+    dim = "Sugar_Products"
+    normalized_dimensions.append(dim)
+    subgroup_code = "1.1.09."
+    sugar_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Sugar codes start with "1.1.09"
+    _df = inf_copy[sugar_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Spices
+    dim = "Spices"    
+    subgroup_code = "1.1.10."
+    spices_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Spices codes start with "1.1.10"
+    _df = inf_copy[spices_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # Packaged Foods and Beverages
+    dim = "Packaged_Foods"
+    subgroup_code = "1.1.12."    
+    packaged_foods_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Packaged Foods codes start with "1.1.12"
+    _df = inf_copy[packaged_foods_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)    
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })
+
+    # NAB
+    dim = "Non_Alcoholic_Beverages"
+    subgroup_code = "1.2.11."
+    nab_filter = (inf_copy['codetype'] == 'subgroup_code') & (inf_copy['code'] == subgroup_code)  # Non-Alcoholic Beverages codes start with "1.2.11"
+    _df = inf_copy[nab_filter].copy()
+    
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[
+        (inf_copy['codetype'] == 'item_code') &
+        (inf_copy['code'].str.startswith(subgroup_code))
+    ].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        } 
+    })    
+
+    agg_df = get_aggdf(aggregates)
+    return agg_df, constituents, normalized_dimensions
+
+async def intoxicants_inflation(inflation_df=None):
+    
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+    
+    dim = "Intoxicants_And_Alcoholic_Beverages"
+    group_code = "2."
+
+    _filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'] == group_code)
+    _df = inf_copy[_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[(inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(group_code))].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    #only label, code, weight
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+    
+    agg_df = get_aggdf(aggregates)
+    return agg_df, constituents, normalized_dimensions
+
+async def apparel_inflation(inflation_df=None):
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+    inf_copy = inflation_df.copy()
+
+    # Not tracking subgroups like clothing and footwear separately - taking a call that there are no meaningful subgroups in Apparel
+    dim = "Apparel"    
+    normalized_dimensions.append(dim)
+    group_code = "3."
+    _filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'] == group_code)
+    _df = inf_copy[_filter].copy()
+    _df['dimensions'] = dim    
+    aggregates.append(_df)
+    _constituents = inf_copy[(inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(group_code))].copy()    
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()    
+    #only label, code, weight    
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)            
+        }        
+    })
+    
+    agg_df = get_aggdf(aggregates)
+
+    return agg_df, constituents, normalized_dimensions
+
+async def housing_inflation(inflation_df=None):
+
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+
+    # This is the reported housing inflation, which includes rent and water --- but not utilities
+    dim = "Housing_Ex_Electricity"    
+    group_code = "4."
+    _filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'] == group_code)
+    _df = inf_copy[_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[(inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(group_code))].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    #only label, code, weight
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+
+    # Housing including electricity
+    dim = "Housing"
+    normalized_dimensions.append(dim)
+    housing_filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith("5.1.01.1."))
+
+    _df = inf_copy[housing_filter].copy()
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+
+    agg_df = get_aggdf(aggregates)
+
+    return agg_df, constituents, normalized_dimensions
+
+
+async def electricity_and_fuel_inflation(inflation_df=None):
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+
+    # This is the reported housing inflation, which includes rent and water --- but not utilities
+    dim = "Electricity_And_Household_Fuel"    
+    group_code = "5."  
+    _filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'] == group_code)
+    _df = inf_copy[_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[(inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(group_code))].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    #only label, code, weight
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })   
+
+    agg_df = get_aggdf(aggregates)
+
+    return agg_df, constituents, normalized_dimensions
+
+async def healthcare_inflation(inflation_df=None):
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+
+    # Healthcare is a group in CPI
+    dim = "Healthcare"
+    normalized_dimensions.append(dim)
+    subgroup_code = "6.1.02."
+    _filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'] == "6.")
+    _df = inf_copy[_filter].copy()
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[(inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(subgroup_code))].copy()    
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    #only label, code, weight
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+    
+    agg_df = get_aggdf(aggregates)
+
+    return agg_df, constituents, normalized_dimensions
+
+async def home_appliances_inflation(inflation_df=None):
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+
+    # Home Appliances is a group in CPI
+    dim = "Home_Appliances"
+    normalized_dimensions.append(dim)
+    subgroup_codes = ["6.1.01.3.", "6.1.01.4.", "6.1.01.5."]
+    _filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(tuple(subgroup_codes)))  # Home Appliances codes start with "
+    _df = inf_copy[_filter].copy()    
+
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+
+    agg_df = get_aggdf(aggregates)
+
+    return agg_df, constituents, normalized_dimensions
+
+async def transport_inflation(inflation_df=None):
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+
+    # Transport is a group in CPI
+    dim = "Transport"
+    normalized_dimensions.append(dim)
+    subgroup_code = "6.1.03.3."
+    _filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(subgroup_code))
+    _df = inf_copy[_filter].copy()
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+
+    # Energy
+    dim = "Energy"
+    normalized_dimensions.append(dim)
+    subgroup_code = "6.1.03.2.1."
+    energy_filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(subgroup_code))
+
+    _df = inf_copy[energy_filter].copy()
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+
+    agg_df = get_aggdf(aggregates)
+
+    return agg_df, constituents, normalized_dimensions
+
+async def communication_inflation(inflation_df=None):
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+
+    # Communication is a group in CPI
+    dim = "Communication"
+    normalized_dimensions.append(dim)
+    subgroup_code = "6.1.03.5."
+    _filter = (inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(subgroup_code))
+    _df = inf_copy[_filter].copy()
+    
+    _agg_df, _constituents = aggregate_inflation.calculate(_df, inf_copy)
+    _agg_df['dimensions'] = dim
+    aggregates.append(_agg_df)
+    
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+
+    agg_df = get_aggdf(aggregates)
+
+    return agg_df, constituents, normalized_dimensions  
+
+async def miscellaneous_inflation(inflation_df=None):
+    aggregates = []
+    constituents = []
+    normalized_dimensions = []
+
+    inf_copy = inflation_df.copy()
+
+    # Miscellaneous is a group in CPI
+    dim = "Miscellaneous"    
+    group_code = "6."
+    _filter = (inf_copy['codetype'] == 'group_code') & (inf_copy['code'] == group_code)
+    _df = inf_copy[_filter].copy()
+
+    _df['dimensions'] = dim
+    aggregates.append(_df)
+    _constituents = inf_copy[(inf_copy['codetype'] == 'item_code') & (inf_copy['code'].str.startswith(group_code))].copy()
+    _constituents['weight'] = _constituents['weight'] / _constituents['weight'].sum()
+    #only label, code, weight
+    _constituents = _constituents[['code', 'label', 'weight']].copy()
+    _constituents = _constituents.to_dict('records')
+
+    constituents.append({
+        "dimensions": dim,
+        "txt":{
+            "items":json.dumps(_constituents, ensure_ascii=False)
+        }
+    })
+
+    agg_df = get_aggdf(aggregates)    
+    
+    return agg_df, constituents, normalized_dimensions
 
 async def item_inflation(start_from, metadata_df=None):
     item_url = f"{cpi_api}/getItemIndex"

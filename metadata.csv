@@ -1,32 +1,32 @@
 code|label|codetype|weight|region
 0.|General|group_code|0.0|combined
-1.|Food and Beverages|group_code|0.0|combined
-2.|Pan, Tobacco and Intoxicants|group_code|0.0|combined
-3.|Clothing and Footwear|group_code|0.0|combined
-4.|Housing|group_code|0.0|combined
-5.|Fuel and Light|group_code|0.0|combined
-6.|Miscellaneous|group_code|0.0|combined
+1.|Food and Beverages|group_code|45.86334000000001|combined
+2.|Pan, Tobacco and Intoxicants|group_code|2.37958|combined
+3.|Clothing and Footwear|group_code|6.527119999999999|combined
+4.|Housing|group_code|10.069749999999999|combined
+5.|Fuel and Light|group_code|6.843100000000001|combined
+6.|Miscellaneous|group_code|28.317149999999998|combined
 7.|Consumer Food Price|group_code|0.0|combined
-1.1.01.|Cereals and Products|subgroup_code|0.0|combined
-1.1.02.|Meat and Fish|subgroup_code|0.0|combined
-1.1.03.|Egg|subgroup_code|0.0|combined
-1.1.04.|Milk and Products|subgroup_code|0.0|combined
-1.1.05.|Oils and Fats|subgroup_code|0.0|combined
-1.1.06.|Fruits|subgroup_code|0.0|combined
-1.1.07.|Vegetables|subgroup_code|0.0|combined
-1.1.08.|Pulses and Products|subgroup_code|0.0|combined
-1.1.09.|Sugar and Confectionery|subgroup_code|0.0|combined
-1.1.10.|Spices|subgroup_code|0.0|combined
-1.1.12.|Prepared Meals, Snacks, Sweets etc.|subgroup_code|0.0|combined
-1.2.11.|Non-alcoholic Beverages|subgroup_code|0.0|combined
-3.1.01.|Clothing|subgroup_code|0.0|combined
-3.1.02.|Footwear|subgroup_code|0.0|combined
-6.1.01.|Household Goods and Services|subgroup_code|0.0|combined
-6.1.02.|Health|subgroup_code|0.0|combined
-6.1.03.|Transport and Communication|subgroup_code|0.0|combined
-6.1.04.|Recreation and Amusement|subgroup_code|0.0|combined
-6.1.05.|Education|subgroup_code|0.0|combined
-6.1.06.|Personal Care and Effects|subgroup_code|0.0|combined
+1.1.01.|Cereals and Products|subgroup_code|9.67357|combined
+1.1.02.|Meat and Fish|subgroup_code|3.612990000000001|combined
+1.1.03.|Egg|subgroup_code|0.43085|combined
+1.1.04.|Milk and Products|subgroup_code|6.60702|combined
+1.1.05.|Oils and Fats|subgroup_code|3.5575|combined
+1.1.06.|Fruits|subgroup_code|2.8913900000000003|combined
+1.1.07.|Vegetables|subgroup_code|6.03935|combined
+1.1.08.|Pulses and Products|subgroup_code|2.3840800000000004|combined
+1.1.09.|Sugar and Confectionery|subgroup_code|1.36409|combined
+1.1.10.|Spices|subgroup_code|2.49503|combined
+1.1.12.|Prepared Meals, Snacks, Sweets etc.|subgroup_code|5.5487|combined
+1.2.11.|Non-alcoholic Beverages|subgroup_code|1.2587700000000002|combined
+3.1.01.|Clothing|subgroup_code|5.577149999999999|combined
+3.1.02.|Footwear|subgroup_code|0.94997|combined
+6.1.01.|Household Goods and Services|subgroup_code|3.8034799999999995|combined
+6.1.02.|Health|subgroup_code|5.89081|combined
+6.1.03.|Transport and Communication|subgroup_code|8.590480000000001|combined
+6.1.04.|Recreation and Amusement|subgroup_code|1.68248|combined
+6.1.05.|Education|subgroup_code|4.46199|combined
+6.1.06.|Personal Care and Effects|subgroup_code|3.8879099999999998|combined
 1.1.01.1.1.01.P|Rice – PDS|item_code|0.37094|combined
 1.1.01.1.1.02.X|Rice – Other Sources|item_code|4.37809|combined
 1.1.01.1.1.03.0|Chira|item_code|0.09524|combined
@@ -326,57 +326,3 @@ code|label|codetype|weight|region
 6.1.06.2.1.02.0|Silver|item_code|0.11175|combined
 6.1.06.2.1.04.0|Other Ornaments|item_code|0.01157|combined
 6.1.06.3.2.01.X|Barber, Beautician, etc.|item_code|0.5517|combined
-1.1.01|Cereals and products|subgroup_code|12.35|rural
-1.1.02|Meat and fish|subgroup_code|4.38|rural
-1.1.03|Egg|subgroup_code|0.49|rural
-1.1.04|Milk and products|subgroup_code|7.72|rural
-1.1.05|Oils and fats|subgroup_code|4.21|rural
-1.1.06|Fruits|subgroup_code|2.88|rural
-1.1.07|Vegetables|subgroup_code|7.46|rural
-1.1.08|Pulses and products|subgroup_code|2.95|rural
-1.1.09|Sugar and confectionery|subgroup_code|1.7|rural
-1.1.10|Spices|subgroup_code|3.11|rural
-1.2.11|Non-alcoholic beverages|subgroup_code|1.37|rural
-1.1.12|Prepared meals, snacks, sweets etc.|subgroup_code|5.56|rural
-nan|Food and beverages|subgroup_code|54.18|rural
-nan|Pan, tobacco and intoxicants|subgroup_code|3.26|rural
-3.1.01|Clothing|subgroup_code|6.32|rural
-3.1.02|Footwear|subgroup_code|1.04|rural
-nan|Clothing and footwear|subgroup_code|7.36|rural
-nan|Housing|subgroup_code||rural
-nan|Fuel and light|subgroup_code|7.94|rural
-6.1.01|Household goods and services|subgroup_code|3.75|rural
-6.1.02|Health|subgroup_code|6.83|rural
-6.1.03|Transport and communication|subgroup_code|7.6|rural
-6.1.04|Recreation and amusement|subgroup_code|1.37|rural
-6.1.05|Education|subgroup_code|3.46|rural
-6.1.06|Personal care and effects|subgroup_code|4.25|rural
-nan|Miscellaneous|subgroup_code|27.26|rural
-nan|General Index (All Groups)|subgroup_code|100.0|rural
-1.1.01|Cereals and products|subgroup_code|6.59|urban
-1.1.02|Meat and fish|subgroup_code|2.73|urban
-1.1.03|Egg|subgroup_code|0.36|urban
-1.1.04|Milk and products|subgroup_code|5.33|urban
-1.1.05|Oils and fats|subgroup_code|2.81|urban
-1.1.06|Fruits|subgroup_code|2.9|urban
-1.1.07|Vegetables|subgroup_code|4.41|urban
-1.1.08|Pulses and products|subgroup_code|1.73|urban
-1.1.09|Sugar and confectionery|subgroup_code|0.97|urban
-1.1.10|Spices|subgroup_code|1.79|urban
-1.2.11|Non-alcoholic beverages|subgroup_code|1.13|urban
-1.1.12|Prepared meals, snacks, sweets etc.|subgroup_code|5.54|urban
-nan|Food and beverages|subgroup_code|36.29|urban
-nan|Pan, tobacco and intoxicants|subgroup_code|1.36|urban
-3.1.01|Clothing|subgroup_code|4.72|urban
-3.1.02|Footwear|subgroup_code|0.85|urban
-nan|Clothing and footwear|subgroup_code|5.57|urban
-nan|Housing|subgroup_code|21.67|urban
-nan|Fuel and light|subgroup_code|5.58|urban
-6.1.01|Household goods and services|subgroup_code|3.87|urban
-6.1.02|Health|subgroup_code|4.81|urban
-6.1.03|Transport and communication|subgroup_code|9.73|urban
-6.1.04|Recreation and amusement|subgroup_code|2.04|urban
-6.1.05|Education|subgroup_code|5.62|urban
-6.1.06|Personal care and effects|subgroup_code|3.47|urban
-nan|Miscellaneous|subgroup_code|29.53|urban
-nan|General Index (All Groups)|subgroup_code|100.0|urban
