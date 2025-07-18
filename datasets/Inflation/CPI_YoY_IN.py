@@ -726,6 +726,7 @@ async def _dimension(label, category, metadata_df, inflation_df, filters, calcul
 
 async def calculate_dimensions(inflation_df=None, metadata_df=None):
     items = [
+        # All reported inflations go here - Main Groups
         {
             "label":"Food_And_Beverages_Ex_Alcoholic_Beverages",
             "as_reported": True,            
@@ -734,54 +735,55 @@ async def calculate_dimensions(inflation_df=None, metadata_df=None):
             ]
         },
         {
-            "label":"Food_And_Beverages",            
-            "inter_country_comparison": True,
+            "label":"Intoxicants_And_Alcoholic_Beverages",
+            "as_reported": True,            
             "filters":[
-                ("group_code", "1."),
-                ("item_code", "2.1.01.1.")
+                ("group_code", "2."),
             ]
         },
         {
-            "label":"Grains",
+            "label":"Apparel",
             "as_reported": True,
             "inter_country_comparison": True,
             "filters":[
-                ("subgroup_code", "1.1.01."),
-                ("subgroup_code", "1.1.08.")
+                ("group_code", "3.")
             ]
         },
-        {            
+        {
+            "label":"Housing_Ex_Electricity",
+            "as_reported": True,
+            "filters":[
+                ("group_code", "4.")
+            ]
+        },
+        {
+            "label":"Electricity_And_Household_Fuel",
+            "as_reported": True,            
+            "filters":[
+                ("group_code", "5.")
+            ]
+        },
+        {
+            "label":"Miscellaneous",
+            "as_reported": True,            
+            "filters":[
+                ("group_code", "6.")
+            ]
+        },
+        # All reported inflations go here - Sub Groups
+         {            
             "label":"Cereals",
             "as_reported": True,
             "filters":[
                 ("subgroup_code", "1.1.01.")
             ]
-        },
-        {
-            "label":"Pulses",
-            "as_reported": True,
-            "filters":[
-                ("subgroup_code", "1.1.08.")
-            ]
-        },
+        },        
         {            
             "label":"Meat_And_Fish",
             "as_reported": True,
             "filters":[
                 ("subgroup_code", "1.1.02.")
             ]
-        },
-        {
-            "label":"Meat",
-            "as_reported": True,
-            "filters":[
-                ("item_code", "1.1.02.1.")
-            ]
-        },
-        {
-            "label":"Seafood",
-            "as_reported": True,
-            "filters":[("item_code", "1.1.02.2.")]
         },
         {
             "label":"Eggs",
@@ -808,6 +810,13 @@ async def calculate_dimensions(inflation_df=None, metadata_df=None):
             "as_reported": True,
             "filters":[("subgroup_code", "1.1.07.")]
         },
+        {
+            "label":"Pulses",
+            "as_reported": True,
+            "filters":[
+                ("subgroup_code", "1.1.08.")
+            ]
+        },
         {           
             "label":"Sugar_Products",
             "as_reported": True,
@@ -831,43 +840,25 @@ async def calculate_dimensions(inflation_df=None, metadata_df=None):
             ]
         },
         {
-            "label":"Intoxicants_And_Alcoholic_Beverages",
+            "label":"Clothing",
             "as_reported": True,            
             "filters":[
-                ("group_code", "2."),
+                ("subgroup_code", "3.1.01.")
             ]
         },
         {
-            "label":"Apparel",
+            "label":"Footwear",
+            "as_reported": True,            
+            "filters":[
+                ("subgroup_code", "3.1.02.")
+            ]
+        },
+        {
+            "label":"Household_Goods_And_Services",
             "as_reported": True,
-            "inter_country_comparison": True,
             "filters":[
-                ("group_code", "3.")
-            ]
-        },
-        {
-            "label":"Housing_Ex_Electricity",
-            "as_reported": True,
-            "filters":[
-                ("group_code", "4.")
-            ]
-        },
-        {
-            "label":"Housing",
-            "as_reported": False,
-            "inter_country_comparison": True,
-            "filters":[
-                ("group_code", "4."),
-                ("item_code", "5.1.01.1.")
-            ]
-        },
-        {
-            "label":"Electricity_And_Household_Fuel",
-            "as_reported": True,
-            "inter_country_comparison": False,
-            "filters":[
-                ("group_code", "5.")
-            ]
+                ("subgroup_code", "6.1.01.")
+            ]            
         },
         {
             "label":"Healthcare",
@@ -878,8 +869,72 @@ async def calculate_dimensions(inflation_df=None, metadata_df=None):
             ]
         },
         {
-            "label":"Home_Appliances",
+            "label":"Transport_And_Communication",
             "as_reported": True,
+            "filters":[
+                ("subgroup_code", "6.1.03.")
+            ]            
+        },
+        {
+            "label":"Recreation_And_Entertainment",
+            "as_reported": True,
+            "filters":[
+                ("subgroup_code", "6.1.04.")
+            ]
+        },
+        {
+            "label":"Education",
+            "as_reported": True,
+            "inter_country_comparison": True,
+            "filters":[
+                ("subgroup_code", "6.1.05.")
+            ]
+        },        
+        {
+            "label":"Personal_Care",
+            "as_reported": True,            
+            "filters":[
+                ("subgroup_code", "6.1.06.")
+            ]
+        },
+        {
+            "label":"Food_And_Beverages",
+            "inter_country_comparison": True,
+            "filters":[
+                ("group_code", "1."),
+                ("item_code", "2.1.01.1.")
+            ]
+        },
+        {
+            "label":"Grains",            
+            "inter_country_comparison": True,
+            "filters":[
+                ("subgroup_code", "1.1.01."),
+                ("subgroup_code", "1.1.08.")
+            ]
+        },
+        {
+            "label":"Meat",
+            "inter_country_comparison": True,           
+            "filters":[
+                ("item_code", "1.1.02.1.")
+            ]
+        },
+        {
+            "label":"Seafood",
+            "inter_country_comparison": True,
+            "filters":[("item_code", "1.1.02.2.")]
+        },        
+        {
+            "label":"Housing",            
+            "inter_country_comparison": True,
+            "filters":[
+                ("group_code", "4."),
+                ("item_code", "5.1.01.1.")
+            ]
+        },
+        {
+            "label":"Home_Appliances",            
             "inter_country_comparison": True,
             "filters":[
                 ("subgroup_code", "6.1.01.3."),
@@ -888,11 +943,10 @@ async def calculate_dimensions(inflation_df=None, metadata_df=None):
             ]            
         },
         {
-            "label":"Transport",
-            "as_reported": True,
+            "label":"Transport",            
             "inter_country_comparison": True,
             "filters":[
-                ("subgroup_code", "6.1.03.")
+                ("subgroup_code", "6.1.03.3.")
             ]
         },
         {
@@ -907,43 +961,26 @@ async def calculate_dimensions(inflation_df=None, metadata_df=None):
             "label":"Communication",
             "as_reported": True,
             "inter_country_comparison": True,
-            "filters":[
+            "filters":[                
                 ("item_code", "6.1.03.5.")
             ]
-        },
-        {
-            "label":"Miscellaneous",
-            "as_reported": True,            
-            "filters":[
-                ("group_code", "6.")
-            ]
-        },
-        {
-            "label":"Education",
-            "as_reported": True,
-            "inter_country_comparison": True,
-            "filters":[
-                ("subgroup_code", "6.1.05.")
-            ]
-        },
-        {   
-            "label":"Recreation_And_Entertainment",
-            "as_reported": True,            
-            "filters":[
-                ("subgroup_code", "6.1.04.")
-            ]
-        },
-        {
-            "label":"Personal_Care",
-            "as_reported": True,            
-            "filters":[
-                ("subgroup_code", "6.1.04.")
-            ]
-        },
-        {
-
         }
     ]
+
+    records = []
+    for item in items:
+        label = item['label']
+        as_reported = item.get('as_reported', False)
+        inter_country_comparison = item.get('inter_country_comparison', False)
+        filters = item['filters']
+        category = label.replace("_", " ")
+        
+        if as_reported:
+            recs = await _dimension(label, category, metadata_df, inflation_df, filters, calculated=False, inter_country_comparison=inter_country_comparison)
+        else:
+            recs = await _dimension(label, category, metadata_df, inflation_df, filters, calculated=True, inter_country_comparison=inter_country_comparison)
+        
+        records.extend(recs)
 
 async def item_inflation(start_from, metadata_df=None):
     item_url = f"{cpi_api}/getItemIndex"
@@ -1064,40 +1101,9 @@ async def update():
 
     print("Data updated successfully.")
     '''        
-    inflations = []
-    inflations.append(overall_inflation(inflation_df))
-    inflations.append(food_and_beverages_inflation(inflation_df))
-    inflations.append(intoxicants_inflation(inflation_df))
-    inflations.append(apparel_inflation(inflation_df))
-    inflations.append(housing_inflation(inflation_df))
-    inflations.append(electricity_and_fuel_inflation(inflation_df))
-    inflations.append(healthcare_inflation(inflation_df))
-    inflations.append(home_appliances_inflation(inflation_df))
-    inflations.append(transport_inflation(inflation_df))
-    inflations.append(communication_inflation(inflation_df))
-    inflations.append(miscellaneous_inflation(inflation_df))
 
-    results = await asyncio.gather(*inflations)
 
-    # Unpack the results
-    for agg_df, constituents_list, normalized_dims in results:        
-        input("Press Enter to continue...")
-        aggregates.append(agg_df)
-        constituents.extend(constituents_list)
-        normalized_dimensions.extend(normalized_dims)        
-
-    agg_df = pd.concat(aggregates, ignore_index=True)
-    agg_df['region'] = 'IN'
-    agg_df['metric'] = 'Value'
-    agg_df['ticker'] = 'CPI_YoY'
-    agg_df['unit'] = 'PERCENT'    
-    #rename CPI_YoY to value
-    agg_df.rename(columns={'CPI_YoY': 'value'}, inplace=True)
-    agg_df['period_span'] = 'M'    
-    agg_df['normalized'] = agg_df['dimensions'].isin(normalized_dimensions)
-    #modify dimensions to have []
-    agg_df['dimensions'] = agg_df['dimensions'].apply(lambda x: f"[{x}]")
-
+    
     # Extra Inflations
     _agg_df, _constituents, _normalized_dimensions = await extra_inflations(inflation_df)
     _agg_df['region'] = 'IN'
