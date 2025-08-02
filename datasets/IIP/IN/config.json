@@ -1,0 +1,12 @@
+{    
+    "datasets":{
+        "IIP":{
+            "schedule":"30 11 1 * *",            
+            "_schedule_comment":"First day of every month at 5PM IST",
+            "frequency":"Monthly",
+            "description":"Contains the Index of Industrial Production (IIP) data for India. This dataset provides insights into the performance of various sectors in the industrial economy, including manufacturing, mining, and electricity.",
+            "start_date":"2014-01-01",
+            "s3_prefix":"datasets/IIP"
+        }
+    }    
+}

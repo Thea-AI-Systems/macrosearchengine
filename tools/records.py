@@ -1,5 +1,6 @@
 import re
 import copy
+import json
 
 def label_to_topic(label, **kwargs):
     join_with = kwargs.get('join_with', ' ')
@@ -52,6 +53,7 @@ def number_convertor(num, **kwargs):
 class DatabankRecord:
     def __init__(self, **kwargs):
         self.rec = {}            
+        self.rec['dataset'] = kwargs.get('dataset', None)
         self.rec['ticker'] = kwargs.get('ticker', None) 
         self.rec['metric'] = kwargs.get('metric', None)
         self.rec['country'] = kwargs.get('country', None)
@@ -141,13 +143,12 @@ class DatabankRecord:
                 rec['weight'] = weight
                 break
         else:
-            self.rec['value_txt'][constituent_key].append({'label': label, 'weight': weight})
-            
+            self.rec['value_txt'][constituent_key].append({'label': label, 'weight': weight})            
 
     def prep_for_insert(self):        
-        try:
+        try:            
             #ticker + metric + dimensions + search_fields
-            all_topics = [self.rec['ticker'], self.rec['metric']] + self.rec.get('dimensions', []) + self.search_fields            
+            all_topics = [self.rec['ticker'], self.rec['metric'], self.rec['dataset']] + self.rec.get('dimensions', []) + self.search_fields            
             if self.rec.get('country') is not None:
                 all_topics.append(self.rec['country'])
             all_topics = list(set(all_topics)) #remove duplicates
@@ -155,9 +156,14 @@ class DatabankRecord:
             self.rec['all_topics'] = all_topics_str
 
             if self.rec.get('dimensions') is not None:                
-                dimensions = list(dict.fromkeys(self.rec['dimensions']))  # remove duplicates, preserve order                                
+                dimensions = list(dict.fromkeys(self.rec['dimensions']))  # remove duplicates, preserve order                                                
                 dimensions_str = build_alltopics_field(dimensions)
                 self.rec['dimensions'] = dimensions_str
+
+            #update categories to a json
+            
+            if self.rec.get('categories') is not None:
+                self.rec['categories'] = json.dumps(self.rec['categories'], ensure_ascii=False)            
             
         except Exception as e:
             print("Error in prep for insert field", e)

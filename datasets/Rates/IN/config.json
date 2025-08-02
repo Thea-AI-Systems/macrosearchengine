@@ -1,0 +1,28 @@
+{    
+    "datasets":{
+        "MoneyMarketRates":{            
+            "schedule":"30 11 * * 5", 
+            "_schedule_comment":"Every Friday at 5PM IST",
+            "frequency":"Weekly",
+            "description":"Contains various money market rates such as Call Money Rate, T-Bill Rates, etc. This is a daily dataset that is released at end of week by RBI. The dataset includes rates for different maturities and segments of the money market.",
+            "start_date":"2010-01-01",
+            "s3_prefix":"datasets/Rates/MoneyMarketRates"
+        },
+        "PolicyRates":{            
+            "schedule":"30 11 * * 5", 
+            "_schedule_comment":"Every Friday at 5PM IST",
+            "frequency":"Weekly",
+            "description":"Contains various policy rates such as Repo Rate, Reverse Repo Rate, Bank Rate, MSF Rate etc. This is a daily dataset that is released at end of week by RBI. The dataset includes rates for different maturities and segments of the policy rates.",
+            "start_date":"2010-01-01",
+            "s3_prefix":"datasets/Rates/PolicyRates"
+        },
+        "BankLendingAndDepositRates":{            
+            "schedule":"30 11 * * 5", 
+            "_schedule_comment":"Every Friday at 5PM IST",
+            "frequency":"Weekly",
+            "description":"Contains various lending and deposit rates of banks. This is a weekly dataset that is released by RBI. The dataset includes rates like interest on savings deposits, term deposits, and MCLR. It provides insights into the interest rate environment in the banking sector.",
+            "start_date":"2010-01-01",
+            "s3_prefix":"datasets/Rates/BankLendingAndDepositRates"
+        }
+    }    
+}

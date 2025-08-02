@@ -1,0 +1,20 @@
+{    
+    "datasets":{
+        "BankCreditAndDeposits":{            
+            "schedule":"30 11 * * 5", 
+            "_schedule_comment":"Every Friday at 5PM IST",
+            "frequency":"Weekly",
+            "description":"Contains credit and deposit statistics of banks. This is a fortnightly dataset that is released by RBI. The dataset includes overall statistic as well as sub segments like Demand and Time deposits, Food and Non-Food credit etc.",
+            "start_date":"2013-01-01",
+            "s3_prefix":"datasets/Banking/BankCreditAndDeposits"
+        },
+        "BankRatios":{            
+            "schedule":"30 11 * * 5", 
+            "_schedule_comment":"Every Friday at 5PM IST",
+            "frequency":"Weekly",
+            "description":"Contains various ratios and rates related to banking sector. This is a weekly dataset that is released by RBI. The dataset includes ratios like CRR, SLR, Cash-Deposit Ratio, etc.",
+            "start_date":"2013-01-01",
+            "s3_prefix":"datasets/Banking/BankRatios"
+        }
+    }    
+}

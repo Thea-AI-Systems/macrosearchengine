@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "dataset": "BankCreditAndDeposits",
+        "description": "Contains credit and deposit statistics of banks. This is a fortnightly dataset that is released by RBI. The dataset includes overall statistic as well as sub segments like Demand and Time deposits, Food and Non-Food credit etc.",
+        "country": "IN",
+        "country_fullname": "India",
+        "path": "datasets/Banking/BankCreditAndDeposits/IN/data.parquet"
+    },
+    {
+        "id": 2,
+        "dataset": "BankRatios",
+        "description": "Contains various ratios and rates related to banking sector. This is a weekly dataset that is released by RBI. The dataset includes ratios like CRR, SLR, Cash-Deposit Ratio, etc.",
+        "country": "IN",
+        "country_fullname": "India",
+        "path": "datasets/Banking/BankRatios/IN/data.parquet"
+    },
+    {
+        "id": 3,
+        "dataset": "MoneyMarketRates",
+        "description": "Contains various money market rates such as Call Money Rate, T-Bill Rates, etc. This is a daily dataset that is released at end of week by RBI. The dataset includes rates for different maturities and segments of the money market.",
+        "country": "IN",
+        "country_fullname": "India",
+        "path": "datasets/Rates/MoneyMarketRates/IN/data.parquet"
+    },
+    {
+        "id": 4,
+        "dataset": "PolicyRates",
+        "description": "Contains various policy rates such as Repo Rate, Reverse Repo Rate, Bank Rate, MSF Rate etc. This is a daily dataset that is released at end of week by RBI. The dataset includes rates for different maturities and segments of the policy rates.",
+        "country": "IN",
+        "country_fullname": "India",
+        "path": "datasets/Rates/PolicyRates/IN/data.parquet"
+    },
+    {
+        "id": 5,
+        "dataset": "BankLendingAndDepositRates",
+        "description": "Contains various lending and deposit rates of banks. This is a weekly dataset that is released by RBI. The dataset includes rates like interest on savings deposits, term deposits, and MCLR. It provides insights into the interest rate environment in the banking sector.",
+        "country": "IN",
+        "country_fullname": "India",
+        "path": "datasets/Rates/BankLendingAndDepositRates/IN/data.parquet"
+    }
+]

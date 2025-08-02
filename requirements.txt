@@ -1,3 +1,4 @@
 curl-cffi
 beautifulsoup4
 pandas
+requests-html

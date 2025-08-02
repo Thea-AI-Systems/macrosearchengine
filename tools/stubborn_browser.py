@@ -1,8 +1,10 @@
 from curl_cffi import requests
+import os
+import httpx
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 @retry(stop=stop_after_attempt(3), wait=wait_random_exponential(multiplier=1, max=10))
-def seed_session(url=None, verify=False):
+async def seed_session(url=None, verify=False):
     session = requests.Session()
     if url is not None:        
         session.get(url, timeout=30, impersonate='chrome', verify=verify)
@@ -30,44 +32,40 @@ def update_session(params):
 
     return session
 
-@retry(stop=stop_after_attempt(3), wait=wait_random_exponential(multiplier=1, max=10))
-def invoke(params):
-    session = update_session(params)
-    
-    url = params.get('url')
-    data = params.get('data', None)
-    timeout = params.get('timeout', 30)
+@retry(stop=stop_after_attempt(5), wait=wait_random_exponential(multiplier=1, max=10))
+async def invoke(params):
+    url = params["url"]
+    data = params.get("data")
+    timeout = params.get("timeout", 30)
+    headers = params.get("addl_headers", {})
+    proxies = params.get("proxies", None)
 
-    requests_kwargs = {
-        'url': url,
-        'timeout': timeout,
-        'impersonate': 'chrome',
-        'verify': False
-    }   
+    async with httpx.AsyncClient(timeout=timeout, headers=headers) as client:
+        try:
+            if params.get("invoke_type") == "get":
+                response = await client.get(url)
+            else:
+                response = await client.post(url, data=data)            
+            response.raise_for_status()
+            return response
+        except Exception as e:
+            #print(f"Error with request {url}: {e}")
+            raise
 
-    if data is not None:
-        requests_kwargs['data'] = data    
-    
-    try:
-        if params.get("invoke_type") == "get":
-            response = session.get(**requests_kwargs)
-        else:
-            response = session.post(**requests_kwargs)        
-        response.raise_for_status()
-        return response
-    except Exception as e:
-        print(f'Error with request {url}')
-        print (e)        
-        raise e
-    
-def post(params):
-    #add params with invoke_type = 'post'
-    adjusted_params = params.copy()
-    adjusted_params['invoke_type'] = 'post'
-    return invoke(adjusted_params)
+async def get(params): return await invoke({**params, "invoke_type": "get"})
+async def post(params): return await invoke({**params, "invoke_type": "post"})
 
-def get(params):
-    #add params with invoke_type = 'get'
-    adjusted_params = params.copy()
-    adjusted_params['invoke_type'] = 'get'
-    return invoke(adjusted_params)
+async def antibot_get(params):
+    scrapfly_api_key = os.environ.get("SCRAPFLY_API_KEY")
+    if not scrapfly_api_key:
+        raise ValueError("SCRAPFLY_API_KEY environment variable is not set")
+    url = "https://api.scrapfly.io/scrape"
+    params['key'] = scrapfly_api_key
+    params['url'] = params.get('url', None)    
+    params['asp'] = True
+    params['render_js'] = True
+    params['tags'] = "player,project:default"
+
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    return response
