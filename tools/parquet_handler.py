@@ -1,22 +1,11 @@
 import boto3
 import duckdb
 import os
-#load config.keys.env
-from dotenv import load_dotenv
 import io
 from datetime import datetime
-from time import time
 from tempfile import NamedTemporaryFile
-import asyncio
-
-#CHANGE THIS TO YOUR OWN S3 CONFIG
-load_dotenv(os.path.join('config', 'keys.env'))
-
-s3_access_key = os.getenv('s3_access_key')
-s3_secret_key = os.getenv('s3_secret_key')
-s3_region = os.getenv('s3_region', 'ap-southeast-1')
-endpoint_url = os.getenv('endpoint_url')
-duckdb_format_endpoint_url = os.getenv('duckdb_format_endpoint_url')
+import uuid
+from tools.s3ops import s3, s3_access_key, s3_secret_key, s3_region, duckdb_format_endpoint_url
 
 pqdb = duckdb.connect()
 pqdb.execute("INSTALL httpfs; LOAD httpfs;")
@@ -25,69 +14,72 @@ pqdb.execute("SET s3_endpoint='" + duckdb_format_endpoint_url + "'")
 pqdb.execute("SET s3_access_key_id='" + s3_access_key + "'")
 pqdb.execute("SET s3_secret_access_key='" + s3_secret_key + "'")
 
-s3 = boto3.client(
-        's3',
-        aws_access_key_id=s3_access_key,
-        aws_secret_access_key=s3_secret_key,
-        endpoint_url=endpoint_url
-    )
-
 bucket = "macrosearchengine"
 
-async def save(df, parquet_loc):        
+async def save(df, parquet_loc):            
     parquets = s3.list_objects_v2(Bucket=bucket, Prefix=parquet_loc)
     file_keys = parquets.get('Contents', [])                
-    
+        
+    df['period_span'] = df['period_span'].replace('None', None)
+    df['period_span'] = df['period_span'].astype(str)
+    df["inter_country_comparison"] = df["inter_country_comparison"].astype(bool)
+    df["as_reported"] = df["as_reported"].astype(bool)
+
     if len(file_keys) == 0:
         #no existing parquet file, so create a new one
         today = datetime.now().strftime('%Y%m%d')
         filename = f"{parquet_loc}/data.parquet"
         buffer = io.BytesIO()
+        #save df        
         df.to_parquet(buffer, index=False)
         buffer.seek(0)
         s3.upload_fileobj(buffer, bucket, filename)            
     else:            
-        dataset_periodend_tuples = df[['dataset', 'period_end']].drop_duplicates().values.tolist()        
+        #metric is also important because constitutents can change
+        deduplicate_tuples = df[['dataset', 'ticker', 'metric', 'period_end']].drop_duplicates().values.tolist()
         
         today = datetime.now().strftime('%Y%m%d')
+        
+        temp_table_name = f"temp_table_{uuid.uuid4().hex}"
+
         pqdb.execute(f"""
-            CREATE OR REPLACE TABLE temp_table AS 
+            CREATE OR REPLACE TABLE {temp_table_name} AS 
             SELECT * FROM read_parquet('s3://{bucket}/{parquet_loc}/*.parquet')                
         """)
 
         #delete dataset_periodend_tuples from temp_table
-        for dataset, period_end in dataset_periodend_tuples:
+        for dataset, ticker, metric, period_end in deduplicate_tuples:
             pqdb.execute(f"""
-                DELETE FROM temp_table 
-                WHERE dataset = '{dataset}' AND period_end = '{period_end}'
-            """)
+                DELETE FROM {temp_table_name}
+                WHERE dataset = '{dataset}' AND ticker = '{ticker}' AND metric = '{metric}' AND period_end = '{period_end}'
+            """)            
 
-        #print columsn in temp_table
-        columns = pqdb.execute("DESCRIBE temp_table").fetchall()
+        '''
+        #print columns in temp_table
+        columns = pqdb.execute(f"DESCRIBE {temp_table_name}").fetchall()
         columns = [col[0] for col in columns]
         print (f"Columns in temp_table: {columns}")
 
         #print columns in df
         df_columns = df.columns.tolist()
         print (f"Columns in df: {df_columns}")
+        '''
 
         #input("Press Enter to continue...")
         #save df to local csv
-        #df.to_csv('temp_table.csv', index=False)
+        df.to_csv(f'{parquet_loc.replace("/", "_")}.csv', index=False)
         #create a new table with the same schema as temp_table
         #append df to temp_table
-        pqdb.execute("INSERT INTO temp_table BY NAME SELECT * FROM df")
-
-        save_time_start = time()        
+        pqdb.execute(f"INSERT INTO {temp_table_name} BY NAME SELECT * FROM df")
 
         #save to local parquet file        
         with NamedTemporaryFile(delete=False, suffix='.parquet') as temp_file:
             temp_file_path = temp_file.name            
         
         pqdb.execute(f"""
-            COPY temp_table TO '{temp_file_path}' 
+            COPY {temp_table_name} TO '{temp_file_path}' 
             (FORMAT PARQUET, COMPRESSION ZSTD, OVERWRITE TRUE)
-        """)        
+        """)
         
         #upload to s3
         with open(temp_file_path, 'rb') as f:
@@ -95,6 +87,9 @@ async def save(df, parquet_loc):
 
         #delete the local temp file
         os.remove(temp_file_path)
+
+        #Delete the temporary table
+        pqdb.execute(f"DROP TABLE IF EXISTS {temp_table_name}")
                 
 #prefix - 'datasets/Inflation/'
 async def get_presigned_url(prefix, expiration=86400):

@@ -1,4 +1,4 @@
-from datasets.CPI.tools import aggregate_inflation
+from datasets.Prices.tools import aggregate_inflation
 from tools import stubborn_browser, parquet_handler
 from bs4 import BeautifulSoup
 from urllib.parse import quote_plus

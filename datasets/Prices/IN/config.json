@@ -1,0 +1,10 @@
+{
+    "datasets": {
+        "CPI": {
+            "frequency": "Monthly",
+            "description": "Contains the Consumer Price Index (CPI) data for India. This dataset provides insights into the inflation trends in the Indian economy, covering various categories such as food, fuel, and services.",
+            "start_date": "2024-01-01",
+            "s3_prefix": "datasets/prices/CPI"
+        }
+    }
+}

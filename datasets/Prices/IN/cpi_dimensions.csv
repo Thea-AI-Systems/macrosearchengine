@@ -1,0 +1,30 @@
+dimension	as_reported	inter_country_comparison	category	filters	exclude_filters
+	TRUE	TRUE		group_code:0.	
+CFPI	TRUE	TRUE	Index	group_code:7.	
+Core_CPI		TRUE	Index	group_code:3.;group_code:4.;subgroup_code:6.1.01.;subgroup_code:6.1.02.;subgroup_code:6.1.04..;subgroup_code:6.1.05.;subgroup_code:6.1.06.	group_code:1.;item_code:6.1.03.2.1.;group_code:2.;group_code:5.
+Supercore_CPI		TRUE	Index		group_code:1.;item_code:6.1.03.2.1.;group_code:2.;group_code:5.;group_code:4.
+Food	TRUE	TRUE	ConsumptionCategory	group_code:1.	
+Grains		TRUE	ConsumptionCategory	subgroup_code:1.1.01.;subgroup_code:1.1.08.	
+Meat		TRUE	ConsumptionCategory	item_code:1.1.02.1.	
+Seafood		TRUE	ConsumptionCategory	item_code:1.1.02.2.	
+Eggs	TRUE	TRUE	ConsumptionCategory	subgroup_code:1.1.03.	
+Dairy	TRUE	TRUE	ConsumptionCategory	subgroup_code:1.1.04.	
+Edible_Oils	TRUE	TRUE	ConsumptionCategory	subgroup_code:1.1.05.	
+Fruits	TRUE	TRUE	ConsumptionCategory	subgroup_code:1.1.06.	
+Vegetables	TRUE	TRUE	ConsumptionCategory	subgroup_code:1.1.07.	
+Tobacco		TRUE	ConsumptionCategory	item_code:2.1.01.3.	
+Alcohol		TRUE	ConsumptionCategory	item_code:2.1.01.1.	
+Apparel	TRUE	TRUE	ConsumptionCategory	group_code:3.	
+Housing	TRUE	TRUE	ConsumptionCategory	group_code:4.	
+Energy_Household	TRUE	TRUE	ConsumptionCategory	group_code:5.	
+Miscellaneous	TRUE		ConsumptionCategory	group_code:6.	
+Healthcare	TRUE	TRUE	ConsumptionCategory	subgroup_code:6.1.02.	
+Education	TRUE	TRUE	ConsumptionCategory	subgroup_code:6.1.05.	
+Household_Goods_And_Services	TRUE	TRUE	ConsumptionCategory	subgroup_code:6.1.01.	
+Transport Services		TRUE	ConsumptionCategory	item_code:6.1.03.3.	
+Transport Equipment		TRUE	ConsumptionCategory	item_code:6.1.03.1.	
+Energy_Transport		TRUE	ConsumptionCategory	item_code:6.1.03.2.1.	
+Communication Services		TRUE	ConsumptionCategory	item_code:6.1.03.5.	
+Communication Equipment		TRUE	ConsumptionCategory	item_code:6.1.03.4.	
+Personal_Care	TRUE	TRUE	ConsumptionCategory	subgroup_code:6.1.06.	
+Leisure	TRUE		ConsumptionCategory	subgroup_code:6.1.04.	

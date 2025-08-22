@@ -13,7 +13,7 @@ load_dotenv(os.path.join('config', 'keys.env'))
 s3_access_key = os.getenv('s3_access_key')
 s3_secret_key = os.getenv('s3_secret_key')
 s3_region = os.getenv('s3_region', 'ap-southeast-1')
-endpoint_url = os.getenv('endpoint_url')
+endpoint_url= os.getenv('duckdb_format_endpoint_url')
 
 pqdb = duckdb.connect()
 pqdb.execute("INSTALL httpfs; LOAD httpfs;")
@@ -21,11 +21,13 @@ pqdb.execute(f"SET s3_region='{s3_region}'")
 pqdb.execute("SET s3_endpoint='" + endpoint_url + "'")
 pqdb.execute("SET s3_access_key_id='" + s3_access_key + "'")
 pqdb.execute("SET s3_secret_access_key='" + s3_secret_key + "'")
+pqdb.execute("SET s3_url_style='path'")
 
-dataset = "BankingStatistics"
+dataset = "IIP"
 
-parquet_loc = f"s3://macrosearchengine/datasets/{dataset}/banking_statistics/*.parquet"
+parquet_loc = f"s3://macrosearchengine/datasets/{dataset}/IN/data.parquet"
 
+'''
 pqdb.execute("CREATE OR REPLACE TABLE databank_test AS SELECT * FROM read_parquet('" + parquet_loc + "')")
 
 query = f"""
@@ -33,8 +35,12 @@ SELECT *
 FROM databank_test
 WHERE period_end = '2025-07-25'
 """
+'''
+query = f"""
+SELECT dimensions
+FROM read_parquet('{parquet_loc}')
+WHERE period_end > '2025-01-01'
+"""
 
 result = pqdb.execute(query).fetchdf()
 print(result)
-
-

@@ -1,16 +1,20 @@
 #from datasets.Inflation import CPI_YoY_IN, CPI_YoY_CN
 from apis import india_rbi
 from tools import parquet_handler
-from datasets.IIP.CN import IIP as IIP_CN
+from datasets.IIP.IN import IIP as IIP_CN
 from datasets.Banking.IN import BankCreditAndDeposits as BankCreditAndDeposits_IN
 from datasets.Banking.IN import BankRatios as BankRatios_IN
+from datasets.Prices.IN import CPI as CPI_IN
+from datasets.ForexReserves.IN import ForexReserves as ForexReserves_IN
 import asyncio
 
 
 async def main():    
     tasks = [
-        BankCreditAndDeposits_IN.update(overwrite_history=True),
-        BankRatios_IN.update(overwrite_history=True)
+        #BankCreditAndDeposits_IN.update(overwrite_history=True),
+        #BankRatios_IN.update(overwrite_history=True)
+        #CPI_IN.update(overwrite_history=False),
+        ForexReserves_IN.update(overwrite_history=False),
     ]
 
     await asyncio.gather(*tasks)

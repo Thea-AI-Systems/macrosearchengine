@@ -35,6 +35,7 @@ def load_all_configs():
     return configs
 
 manually_update_datasets = [
+    #"BankCreditAndDeposits"
     "IIP"
 ]
 
@@ -50,6 +51,8 @@ async def update_dataset(dataset, config, overwrite_history=False):
         print(f"Updating dataset: {dataset}")
         await module.update(overwrite_history)
     except ImportError as e:
+        import traceback
+        print (traceback.format_exc())
         print(f"Error importing module {module_name}: {e}")
 
 
@@ -124,7 +127,7 @@ async def build_search_index():
         })
 
     #save search_index to 
-    search_index_path = os.path.join(dataset_path, "search_index.json")
+    search_index_path = os.path.join("search_index.json")
     with open(search_index_path, "w") as f:
         json.dump(search_index, f)
 

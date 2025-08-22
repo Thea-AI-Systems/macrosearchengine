@@ -64,7 +64,9 @@ class DatabankRecord:
         self.rec['unit'] = kwargs.get('unit', None)
         self.rec['created_by'] = kwargs.get('created_by', "MacroSearchEngine")
         self.rec['inter_country_comparison'] = kwargs.get('inter_country_comparison', False)
-       
+        self.rec['as_reported'] = kwargs.get('as_reported', False)
+        self.rec['pfea'] = kwargs.get('pfea', None) #this is for estimate, final, provisional, actual
+
         if kwargs.get('dimensions') is not None:
             self.rec['dimensions'] = kwargs.get('dimensions')
 
@@ -76,9 +78,6 @@ class DatabankRecord:
 
         if kwargs.get('updated_on') is not None:
             self.rec['updated_on'] = kwargs.get('updated_on')
-        
-        if kwargs.get('period_span') is not None:
-            self.rec['period_span'] = kwargs.get('period_span')
 
         if kwargs.get('source') is not None:
             self.rec['source'] = kwargs.get('source')        
@@ -123,35 +122,43 @@ class DatabankRecord:
         self.update_categories(label, category)
 
     '''
-        value_txt = {
-            "<key>": [
-                {"label": "<label>", "weight": <weight>}
-            ],
-            ...
-        }
+        value_txt = [{"weight":xx, "ticker":xx, "dimensions":xx}]        
     '''
-    def add_constituent(self, label, weight, constituent_key):
+    def add_constituent(self, ticker=None, value=None, dimensions=None):
+        if self.rec.get('metric', '') != 'Constituents':
+            self.rec['metric'] = 'Constituents'
+        if self.rec.get('unit', '') != 'JSON':
+            self.rec['unit'] = 'JSON'
         #find if label already exists
         if self.rec.get('value_txt') is None:
-            self.rec['value_txt'] = {}
-        if constituent_key not in self.rec['value_txt']:
-            self.rec['value_txt'][constituent_key] = []        
-        
-        #add the new item        
-        for rec in self.rec['value_txt'][constituent_key]:
-            if rec['label'] == label:
-                rec['weight'] = weight
-                break
-        else:
-            self.rec['value_txt'][constituent_key].append({'label': label, 'weight': weight})            
+            self.rec['value_txt'] = []
 
-    def prep_for_insert(self):        
+        #these are within the constituent record - so, make them a text string
+        if dimensions is not None and isinstance(dimensions, list):
+            dimensions = ']['.join(dimensions)  # convert list to string for JSON storage
+            dimensions = '[' + dimensions + ']'
+
+        for constituent in self.rec['value_txt']:
+            if constituent.get('ticker') == ticker and constituent.get('dimensions') == dimensions:
+                constituent['weight'] = value
+                return
+        else:
+            #if not found, add a new one
+            constituent = {
+                "ticker": ticker,
+                "weight": value,
+                "dimensions": dimensions
+            }
+            self.rec['value_txt'].append(constituent)        
+
+    def prep_for_insert(self):
         try:            
             #ticker + metric + dimensions + search_fields
             all_topics = [self.rec['ticker'], self.rec['metric'], self.rec['dataset']] + self.rec.get('dimensions', []) + self.search_fields            
             if self.rec.get('country') is not None:
                 all_topics.append(self.rec['country'])
             all_topics = list(set(all_topics)) #remove duplicates
+            all_topics = [topic for topic in all_topics if topic is not None]
             all_topics_str = build_alltopics_field(all_topics)
             self.rec['all_topics'] = all_topics_str
 
@@ -163,7 +170,10 @@ class DatabankRecord:
             #update categories to a json
             
             if self.rec.get('categories') is not None:
-                self.rec['categories'] = json.dumps(self.rec['categories'], ensure_ascii=False)            
+                self.rec['categories'] = json.dumps(self.rec['categories'], ensure_ascii=False)    
+
+            if self.rec.get('value_txt') is not None:
+                self.rec['value_txt'] = json.dumps(self.rec['value_txt'], ensure_ascii=False)        
             
         except Exception as e:
             print("Error in prep for insert field", e)

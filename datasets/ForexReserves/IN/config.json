@@ -1,0 +1,11 @@
+{
+    "datasets": {
+        "ForexReserves": {
+            "schedule": "30 11 * * 5",
+            "_schedule_comment": "Every Friday at 5PM IST",
+            "frequency": "Weekly",
+            "start_date": "2025-05-01",
+            "s3_prefix": "datasets/ForexReserves"
+        }
+    }
+}

@@ -5,13 +5,12 @@ from tqdm import tqdm
 from dateutil import parser
 from tools import helpers, parquet_handler
 from tools.records import DatabankRecord
-
+import re
 
 country = "IN"
 
-
 def get_period_end_by_header_cell_text(table):
-    period_end_search_terms = ["Outstanding as on", "Outstandingas on "]    
+    period_end_search_terms = ["Outstanding as on", "Outstandingas on ", 'As on']    
     
     try:
         #find date by date_split_on
@@ -23,7 +22,7 @@ def get_period_end_by_header_cell_text(table):
                     text_cleaned = helpers.adj_text(table_dt_el.get_text(separator=" "))  # <-- this handles <br>
                     period_end = helpers.adj_text(text_cleaned).split(q)[1].strip()  
                     period_end = period_end.replace("#", "").replace(",", ", ")                                        
-                    period_end = parser.parse(period_end.strip())
+                    period_end = parser.parse(period_end.strip())                               
                     return period_end
     except Exception as e:        
         print (f"Cannot find date in table: {e}")
@@ -99,24 +98,24 @@ async def process_table(table_rec, recs, dataset, processing_options):
     for rec in recs:
         '''
             Search for metric using search_term
-        '''
-        print (rec)
+        '''        
         search_string = rec["search_term"]
         ticker = rec["ticker"]        
         categories = rec.get("categories", {})
         dimensions = list(categories.keys()) if categories else None        
         table_cell = None        
+        pattern = re.compile(helpers.adj_text(search_string), re.IGNORECASE)
 
         #search for table row
         for td in table.find_all("td"):
-            if td.text:                
-                if helpers.adj_text(search_string).lower() in helpers.adj_text(td.text).lower():
+            if td.text:
+                if pattern.search(td.text):
                     table_cell = td
                     break
         if table_cell is None:
             print(f"Cannot find search term '{search_string}' in table")
             print (source)
-            continue            
+            continue      
         try:
             table_row = table_cell.find_parent("tr")        
             value = None
@@ -127,12 +126,7 @@ async def process_table(table_rec, recs, dataset, processing_options):
             if processing_options.get("value_col")=="first":
                 value = helpers.to_numeric(table_row.find_all("td")[1].text.strip().split(" ")[0])
                 if processing_options.get("period_end_cell", None)=="keyword_search":
-                    period_end = get_period_end_by_header_cell_text(table)
-                    #if period end is gretaer than today - wake me up
-                    if period_end > datetime.now():
-                        print(f"Period end {period_end} is greater than today. Please check the source.")
-                        print (source)
-                        input("Press Enter to continue...")                    
+                    period_end = get_period_end_by_header_cell_text(table)                    
                 else:
                     raise e
             
@@ -175,6 +169,8 @@ async def process_table(table_rec, recs, dataset, processing_options):
             data_recs.append(value_rec.rec)
             
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             print(f"Error processing ticker {ticker}: {e}")                
             print (table_rec.get("source"))
             continue        
@@ -182,7 +178,11 @@ async def process_table(table_rec, recs, dataset, processing_options):
     return data_recs
 
 
-async def updater(overwrite_history=False, start_from=None, config=None, dataset=None, recs=None, processing_options={}):
+'''
+    constituent_recs are in the format {ticker:xx, dimensions:xx} - we need to calculate the weight for each date
+'''
+
+async def updater(overwrite_history=False, start_from=None, config=None, dataset=None, recs=None, constituent_recs=None, processing_options={}):
     updated_dates = []
 
     if not start_from:
@@ -202,8 +202,6 @@ async def updater(overwrite_history=False, start_from=None, config=None, dataset
         if not recs:
             continue
         _df = pd.DataFrame(_recs)
-        #print (_df)
-        #input("Press Enter to continue..."  )
         all_df.append(_df)
     
     if not all_df:
@@ -211,5 +209,61 @@ async def updater(overwrite_history=False, start_from=None, config=None, dataset
         return
     
     all_df = pd.concat(all_df, ignore_index=True)
+    #convert period_end to date - just date - not datetime
+    all_df['period_end'] = pd.to_datetime(all_df['period_end']).dt.date
     
+    add_constituent_recs = []
+    if (constituent_recs is not None):
+        #group by period_end - and iterate over each date
+        for period_end, group in all_df.groupby('period_end'):
+            group_source = group['source'].iloc[0] if not group['source'].isnull().all() else None
+            group_updated_on = group['updated_on'].iloc[0] if not group['updated_on'].isnull().all() else None
+            group_period_span = group['period_span'].iloc[0] if not group['period_span'].isnull().all() else None
+            
+            
+            for _constituent_rec in constituent_recs:
+                rec = DatabankRecord(
+                    dataset=dataset,
+                    ticker=_constituent_rec['parent'].get('ticker', ''),
+                    country='IN',
+                    period_end=period_end,
+                    period_span=group_period_span,
+                    source=group_source,
+                    updated_on=group_updated_on,
+                    metric='Constituents',
+                    unit='JSON'
+                )
+                parent_filter = (group['ticker'] == _constituent_rec['parent'].get('ticker', '')) & (group['metric'] == 'Value')
+                parent_dims = _constituent_rec['parent'].get("dimensions", None)
+                if parent_dims is None:
+                    parent_filter = parent_filter & group['dimensions'].isna()
+                else:
+                    parent_filter = parent_filter & (group['dimensions'] == parent_dims)
+
+                parent_rec = group[parent_filter]
+                parent_value = parent_rec['value'].iloc[0] if not parent_rec['value'].isnull().all() else None
+
+                for item in _constituent_rec.get('value_txt'):
+                    item_filter = (group['ticker'] == item.get('ticker', '')) & (group['metric'] == 'Value')
+                    item_dims = item.get("dimensions", None)
+                    if item_dims is not None:
+                        item_filter = item_filter & (group['dimensions'] == item_dims)
+                    else:
+                        item_filter = item_filter & group['dimensions'].isna()
+
+                    item_rec = group[item_filter]
+                    item_value = item_rec['value'].iloc[0] if not item_rec['value'].isnull().all() else None
+                    if not item_rec.empty:
+                        item_weight = item_value / parent_value if parent_value else None
+                        if item_weight is not None:
+                            rec.add_constituent(item.get('ticker', ''), item_weight, item.get('dimensions', None))
+            
+                rec.prep_for_insert()
+                add_constituent_recs.append(rec.rec)
+    
+    if len(add_constituent_recs)>0:
+        _df = pd.DataFrame(add_constituent_recs)        
+        _df['period_end'] = pd.to_datetime(_df['period_end']).dt.date
+        all_df = pd.concat([all_df, _df], ignore_index=True)
+
     await parquet_handler.save(all_df, f'{config["s3_prefix"]}/{country}')

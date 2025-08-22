@@ -34,10 +34,10 @@ def get_data_as_csv(startyear=2011, endyear=2025):
         series_ids.append(f"CUSR0000{code}")    
     
     data = json.dumps({
-        "seriesid": series_ids,
-        "startyear":"2025", "endyear":"2025",
-        "calculations": True,
-        "registrationkey": api_key
+            "seriesid": series_ids,
+            "startyear":"2025", "endyear":"2025",
+            "calculations": True,
+            "registrationkey": api_key
         })
     
     try:
@@ -48,8 +48,7 @@ def get_data_as_csv(startyear=2011, endyear=2025):
         
         recs = []
         for result in json_data['Results']['series']:
-            itemcode = result['seriesID'][len('CUUSR0000')-1:]
-            print (itemcode)
+            itemcode = result['seriesID'][len('CUUSR0000')-1:]            
             itemlabel = next((k for k, v in itemcode_key.items() if v == itemcode), "Unknown")
             
             for data in result['data']:

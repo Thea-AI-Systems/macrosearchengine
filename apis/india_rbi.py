@@ -75,7 +75,17 @@ datasets = {
             "TYPE":"Section",
             "PARAM1":4
         }
-    }
+    },
+    "ForexReserves": {                
+        "url":"https://rbi.org.in/Scripts/WSSViewDetail.aspx",
+        "table_base_url": "https://rbi.org.in/Scripts/",
+        "fetch_type": "weekly_table",        
+        "page_search_term": "Foreign Exchange Reserves",
+        "params": {
+            "TYPE":"Section",
+            "PARAM1":2
+        }
+    },
 }
 
 async def get_weekly_table(dataset, url, release_date):

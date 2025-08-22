@@ -44,7 +44,7 @@ def calculate(df_orig, metadata_df=None):
     #get all weights from metadata_df with codetype and code matching elements in df
     codes = df['code'].unique()
     constituents_df = metadata_df[metadata_df['code'].isin(codes) & (metadata_df['codetype'] == 'item_code')]
-    constituents_df = constituents_df[['code', 'label', 'weight']].copy()    
+    constituents_df = constituents_df[['label', 'weight']].copy()    
     
     return agg_df, constituents_df
     

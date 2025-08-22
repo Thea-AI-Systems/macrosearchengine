@@ -1,0 +1,43 @@
+dimensions	as_reported	inter_country_comparison	category
+	TRUE	TRUE	
+CFPI	TRUE	TRUE	Index
+Core_CPI		TRUE	Index
+			
+			
+			
+			
+			
+			
+			
+			
+Apparel	TRUE	TRUE	ConsumptionCategory
+Housing_Ex_Electricity	TRUE		ConsumptionCategory
+Electricity_And_Household_Fuel	TRUE		ConsumptionCategory
+Miscellaneous	TRUE		ConsumptionCategory
+Cereals	TRUE		ConsumptionCategory
+Eggs	TRUE	TRUE	ConsumptionCategory
+Dairy	TRUE	TRUE	ConsumptionCategory
+Edible_Oils	TRUE	TRUE	ConsumptionCategory
+Fruits	TRUE	TRUE	ConsumptionCategory
+Vegetables	TRUE	TRUE	ConsumptionCategory
+Pulses	TRUE		ConsumptionCategory
+Sugar_Products	TRUE		ConsumptionCategory
+Spices	TRUE		ConsumptionCategory
+Packaged_Foods	TRUE		ConsumptionCategory
+Non_Alcoholic_Beverages	TRUE		ConsumptionCategory
+Healthcare	TRUE	TRUE	ConsumptionCategory
+Recreation_And_Entertainment	TRUE		ConsumptionCategory
+Education	TRUE	TRUE	ConsumptionCategory
+Personal_Care	TRUE		ConsumptionCategory
+Food_And_Beverages		TRUE	ConsumptionCategory
+Grains		TRUE	ConsumptionCategory
+Meat		TRUE	ConsumptionCategory
+Seafood		TRUE	ConsumptionCategory
+Housing		TRUE	ConsumptionCategory
+Home_Appliances		TRUE	ConsumptionCategory
+Household_Goods_And_Services_Ex_Home_Appliances		TRUE	ConsumptionCategory
+Transport Services	TRUE	TRUE	ConsumptionCategory
+Transport Equipment	TRUE	TRUE	ConsumptionCategory
+Energy	TRUE	TRUE	ConsumptionCategory
+Communication Services	TRUE	TRUE	ConsumptionCategory
+Communication Equipment	TRUE	TRUE	ConsumptionCategory
